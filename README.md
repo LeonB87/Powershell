@@ -1,4 +1,4 @@
-# Scripts style H1
+# Scripts
 Mijn Powershell Scripts
 
 ## Disclaimer
