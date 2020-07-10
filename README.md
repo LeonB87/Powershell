@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/familie-boers/Powershell/_apis/build/status/LeonB87.Powershell-Scripts?branchName=develop)](https://dev.azure.com/familie-boers/Powershell/_build/latest?definitionId=10&branchName=master)
+
 # Scripts
 
 PowerShell Scripts and Modules I created myself or found online and edited to my liking.
