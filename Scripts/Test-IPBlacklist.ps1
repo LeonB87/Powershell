@@ -161,7 +161,7 @@
                 $null = [System.Net.Dns]::GetHostEntry($fqdn)
                 $blacklistedOn += $server
             }
-            catch { }
+            catch { throw $_ }
         }
 
         if ($blacklistedOn.Count -gt 0) {
