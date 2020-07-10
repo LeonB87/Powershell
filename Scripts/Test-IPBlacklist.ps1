@@ -23,7 +23,7 @@
 
     .NOTES
     ===========================================================================
-    Created by: Léon Boers (Ictivity)
+    Created by: Léon Boers
     Github: https://github.com/LeonB87/Scripts
 
     Versions:

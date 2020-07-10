@@ -172,7 +172,7 @@ PROCESS {
             $PathInfo = Split-path -Path $PSScriptRoot -Parent | join-path -ChildPath $path
             Write-Information "## Analyze folder: $PathInfo - started" -InformationAction Continue
 
-            $ScriptAnalyzerResult = Invoke-ScriptAnalyzer -Path $PathInfo -Recurse -Settings "$($PSScriptRoot)\analysersettings.psd1" -Verbose
+            $ScriptAnalyzerResult = Invoke-ScriptAnalyzer -Path $PathInfo -Recurse -Settings "$($PSScriptRoot)\analysersettings.psd1"
         }
 
         if ($stopwatch.IsRunning) {
