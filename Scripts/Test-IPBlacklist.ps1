@@ -78,16 +78,12 @@
 
         # If company is not filled with data, This means were not going to Write to WMI and store the data. We'll just return the data
         if ($namespace) {
-            #######################################################################################
-            # WMI Part 1 - Preparation of WMI
-            #######################################################################################
-            # Check to see if the root\cimv2\%namespace% WMI namespace exists - if it doesn't, then let's create it
-            # Thanks to http://gallery.technet.microsoft.com/scriptcenter/d230c216-9d21-4130-a190-4049ca2df21c for the code
+
             If (Get-WmiObject -Namespace "root\cimv2" -Class "__NAMESPACE" | Where-Object {$_.Name -eq $Namespace}) {
-                WRITE-HOST "The root\cimv2\$($Namespace) WMI namespace exists."
+                write-output "The root\cimv2\$($Namespace) WMI namespace exists."
             }
             Else {
-                WRITE-HOST "The root\cimv2\$($Namespace) WMI namespace does not exist."
+                write-output ("The root\cimv2\$($Namespace) WMI namespace does not exist.")
                 $wmi = [wmiclass]"root\cimv2:__Namespace"
                 $newNamespace = $wmi.createInstance()
                 $newNamespace.name = $Namespace
@@ -99,21 +95,21 @@
             # Check to see if the class exists - if it doesn't, then let's create it
             # Check to see if the class exists - if it doesn't, then let's create it
             If (Get-WmiObject -List -Namespace "root\cimv2\$($Namespace)" | Where-Object {$_.Name -eq $Class}) {
-                WRITE-HOST "The " $Class " WMI class exists."
+                Write-Output ("The $($Class) WMI class exists.")
                 # Because the class already exists, we need to make sure it's 'blank', and does not contain any pre-populated instances
                 # Hint: Pre-populated instances could have come from someone having already run this script.
                 $GetExistingInstances = Get-WmiObject -Namespace "root\cimv2\$($Namespace)" -Class $Class
                 If ($null -eq $GetExistingInstances) {
-                    WRITE-HOST "There are no instances in this WMI class."
+                    write-output "There are no instances in this WMI class."
                 }
                 Else {
 
                 }
             }
-            WRITE-HOST "Now creating the " $Class " WMI class."
+            write-output ("Now creating the $($Class)  WMI class.")
             # Because the class doesn't exist, let's create it, and specify all of the appropriate properties.
-            $subClass = New-Object System.Management.ManagementClass ("root\cimv2\$($Namespace)", [String]::Empty, $null); 
-            $subClass["__CLASS"] = $Class; 
+            $subClass = New-Object System.Management.ManagementClass ("root\cimv2\$($Namespace)", [String]::Empty, $null);
+            $subClass["__CLASS"] = $Class;
             $subClass.Qualifiers.Add("Static", $true)
             $subClass.Properties.Add("IP", [System.Management.CimType]::String, $false)
             $subClass.Properties["IP"].Qualifiers.Add("Key", $true)
@@ -186,7 +182,7 @@
             #
 
             $FilterURL = 'IP = "' + $IP + '"'
-            write-host $FilterURL
+            write-output $FilterURL
             $mb = Get-WmiObject -Class $Class -Filter $FilterURL -Namespace root\cimv2\$Namespace
             $mb | Remove-WMIObject
 
