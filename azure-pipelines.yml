@@ -84,7 +84,7 @@ stages:
               Destination: AzureBlob
               storage: pscodehealth
               ContainerName: 'pscodehealthcontainer'
-              BlobPrefix: 'develop-'
+              BlobPrefix: 'develop-PSCodeHealthReport.html'
           - task: versioncounter@1
             displayName: 'Update - Version number (develop)'
             condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
