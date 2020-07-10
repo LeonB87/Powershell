@@ -46,7 +46,9 @@ stages:
               failTaskOnFailedTests: true
               testResultsFiles: '**/ScriptAnalyzerResult.xml'
           - task: PSCodeHealth@0
-            displayName: 'Testing Script repository'
+            displayName: 'Testing Script repository (Pull to Master)'
+            condition: and(succeeded(), and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')))
+            continueOnError: true
             inputs:
               SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
               Recurse: true
@@ -60,6 +62,24 @@ stages:
               ComplexityAverage: true
               NestingDepthAverage: true
               ComplianceFailureAction: 'fail'
+          - task: PSCodeHealth@0
+            displayName: 'Testing Script repository'
+            condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+            continueOnError: true
+            inputs:
+              SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
+              Recurse: true
+              GenerateHtmlReport: true
+              HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'
+              SelectMetrics: true
+              LinesOfCodeAverage: true
+              ScriptAnalyzerErrors: true
+              ScriptAnalyzerWarnings: true
+              ScriptAnalyzerFindingsAverage: true
+              ComplexityAverage: true
+              NestingDepthAverage: true
+              ComplianceFailureAction: 'warning'
+
           - task: AzureFileCopy@4
             displayName: 'AzureBlob File Copy'
             inputs:
