@@ -47,6 +47,7 @@ stages:
               testResultsFiles: '**/ScriptAnalyzerResult.xml'
           - task: PSCodeHealth@0
             displayName: 'Testing Script repository'
+            continueOnError: true
             inputs:
               SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
               Recurse: true
