@@ -75,7 +75,6 @@ stages:
               ComplexityAverage: true
               NestingDepthAverage: true
               ComplianceFailureAction: 'warning'
-
           - task: AzureFileCopy@4
             displayName: 'AzureBlob File Copy'
             inputs:
@@ -85,6 +84,49 @@ stages:
               storage: pscodehealth
               ContainerName: 'pscodehealthcontainer'
               BlobPrefix: 'develop-PSCodeHealthReport.html'
+          - task: PSCodeHealth@0
+            displayName: 'Testing Script repository (Pull to Master)'
+            condition: and(succeeded(), and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')))
+            continueOnError: true
+            inputs:
+              SourceCodePath: '$(system.defaultworkingdirectory)/modules'
+              Recurse: true
+              GenerateHtmlReport: true
+              HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReportModules.html'
+              SelectMetrics: true
+              LinesOfCodeAverage: true
+              ScriptAnalyzerErrors: true
+              ScriptAnalyzerWarnings: true
+              ScriptAnalyzerFindingsAverage: true
+              ComplexityAverage: true
+              NestingDepthAverage: true
+              ComplianceFailureAction: 'fail'
+          - task: PSCodeHealth@0
+            displayName: 'Testing Script repository'
+            condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+            continueOnError: true
+            inputs:
+              SourceCodePath: '$(system.defaultworkingdirectory)/modules'
+              Recurse: true
+              GenerateHtmlReport: true
+              HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReportModules.html'
+              SelectMetrics: true
+              LinesOfCodeAverage: true
+              ScriptAnalyzerErrors: true
+              ScriptAnalyzerWarnings: true
+              ScriptAnalyzerFindingsAverage: true
+              ComplexityAverage: true
+              NestingDepthAverage: true
+              ComplianceFailureAction: 'warning'
+          - task: AzureFileCopy@4
+            displayName: 'AzureBlob File Copy'
+            inputs:
+              SourcePath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'
+              azureSubscription: 'Azure Familie-Boers'
+              Destination: AzureBlob
+              storage: pscodehealth
+              ContainerName: 'pscodehealthcontainer'
+              BlobPrefix: 'develop-PSCodeHealthReportModule.html'
           - task: versioncounter@1
             displayName: 'Update - Version number (develop)'
             condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))

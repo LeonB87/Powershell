@@ -1,5 +1,5 @@
 <#===========================================================================
-Created by: Léon Boers (Ictivity)
+Created by: Léon Boers
 Github: https://github.com/LeonB87/Scripts
 
 Versions:
@@ -82,29 +82,29 @@ function Log-ScriptProgression () {
     <#
     .SYNOPSIS
     Simple function to start a transcript of a powershell script
-    
+
     .DESCRIPTION
     Simple function to start a transcript of a powershell script. Also cleans up old files.
-    
+
     .PARAMETER LogDirectory
     Enter the location where to store the logfiles
-    
+
     .PARAMETER LogName
     The name of the logfile. The Current Date gets appended to this.
-    
+
     .PARAMETER LogRetentionDays
     The ammount of days to keep old log files. Defauls to 31
-    
+
     .PARAMETER LogDateFormat
     The format of the date that gets appended to the logfile. Defaults to dd-MM-yyyy (example: 02-11-2018)
-    
+
     .EXAMPLE
     LogScriptProgression -LogDirectory "\\ubc.local\DFS\CentralLogging\AD-Cleanup" -LogName AD_CleanupScript -LogRetentionDays 93
 
     % your script %
 
     stop-transcript
-    
+
     .NOTES
   	===========================================================================
     Created by: Léon Boers (Ictivity)
@@ -147,7 +147,7 @@ function Log-ScriptProgression () {
 
     Write-Output "Looking for old Logfile. Retentiondays is set to: $($LogRetentionDays) "
     $OldLogFiles = Get-ChildItem -Path $LogDirectory -Recurse -Force | Where-Object { !$_.PSIsContainer -and $_.CreationTime -lt `
-        ((Get-date).AddDays(-$LogRetentionDays)) -and $_.Name -like "*.log"} 
+        ((Get-date).AddDays(-$LogRetentionDays)) -and $_.Name -like "*.log"}
 
     foreach ($OldLogFile in $OldLogFiles) {
         Write-Output "Removing Old Logfile $OldLogFile"
@@ -275,14 +275,14 @@ function Clean-String {
         'ą' = 'a'
         'ä' = 'a'
         'á' = 'a'
-        
+
         # b
         'ƀ' = 'b'
         'ƃ' = 'b'
-        
+
         # Tone six
         'ƅ' = 'b'
-        
+
         # c
         'ç' = 'c'
         'ć' = 'c'
@@ -290,12 +290,12 @@ function Clean-String {
         'ċ' = 'c'
         'č' = 'c'
         'ƈ' = 'c'
-        
+
         # d
         'ď' = 'd'
         'đ' = 'd'
         'ƌ' = 'd'
-        
+
         # e
         'è' = 'e'
         'é' = 'e'
@@ -306,17 +306,17 @@ function Clean-String {
         'ė' = 'e'
         'ę' = 'e'
         'ě' = 'e'
-        
+
         # g
         'ĝ' = 'e'
         'ğ' = 'e'
         'ġ' = 'e'
         'ģ' = 'e'
-        
+
         # h
         'ĥ' = 'h'
         'ħ' = 'h'
-        
+
         # i
         'ì' = 'i'
         'í' = 'i'
@@ -327,22 +327,22 @@ function Clean-String {
         'ĭ' = 'i'
         'į' = 'i'
         'ı' = 'i'
-        
+
         # j
         'ĳ' = 'j'
         'ĵ' = 'j'
-        
+
         # k
         'ķ' = 'k'
         'ĸ' = 'k'
-        
+
         # l
         'ĺ' = 'l'
         'ļ' = 'l'
         'ľ' = 'l'
         'ŀ' = 'l'
         'ł' = 'l'
-        
+
         # n
         'ñ' = 'n'
         'ń' = 'n'
@@ -350,7 +350,7 @@ function Clean-String {
         'ň' = 'n'
         'ŉ' = 'n'
         'ŋ' = 'n'
-        
+
         # o
         'ð' = 'o'
         'ó' = 'o'
@@ -362,12 +362,12 @@ function Clean-String {
         'ŏ' = 'o'
         'ő' = 'o'
         'œ' = 'o'
-        
+
         # r
         'ŕ' = 'r'
         'ŗ' = 'r'
         'ř' = 'r'
-        
+
         # s
         'ś' = 's'
         'ŝ' = 's'
@@ -375,12 +375,12 @@ function Clean-String {
         'š' = 's'
         'ß' = 'ss'
         'ſ' = 's'
-        
+
         # t
         'ţ' = 't'
         'ť' = 't'
         'ŧ' = 't'
-        
+
         # u
         'ù' = 'u'
         'ú' = 'u'
@@ -392,15 +392,15 @@ function Clean-String {
         'ů' = 'u'
         'ű' = 'u'
         'ų' = 'u'
-        
+
         # w
         'ŵ' = 'w'
-        
+
         # y
         'ý' = 'y'
         'ÿ' = 'y'
         'ŷ' = 'y'
-        
+
         # z
         'ź' = 'z'
         'ż' = 'z'
