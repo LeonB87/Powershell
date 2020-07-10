@@ -59,6 +59,14 @@ stages:
               ComplexityAverage: true
               NestingDepthAverage: true
               ComplianceFailureAction: 'fail'
+          - task: AzureFileCopy@4
+            displayName: 'AzureBlob File Copy'
+            inputs:
+              SourcePath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'
+              azureSubscription: 'Azure Familie-Boers'
+              Destination: AzureBlob
+              storage: pscodehealth
+              ContainerName: pscodehealthcontainer
           - task: versioncounter@1
             displayName: 'Update - Version number (develop)'
             condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
