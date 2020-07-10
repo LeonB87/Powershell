@@ -1,0 +1,1 @@
+The file in this folder are used in the Azure pipeline to analyze the powershell scripts
