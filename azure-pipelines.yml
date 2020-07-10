@@ -44,7 +44,7 @@ stages:
           - task: PSCodeHealth@0
             displayName: 'Testing Script repository (Pull to Master)'
             condition: and(succeeded(), and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')))
-            continueOnError: true
+            continueOnError: false
             inputs:
               SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
               Recurse: true
@@ -85,9 +85,9 @@ stages:
               ContainerName: 'pscodehealthcontainer'
               BlobPrefix: 'develop-PSCodeHealthReport.html'
           - task: PSCodeHealth@0
-            displayName: 'Testing Script repository (Pull to Master)'
+            displayName: 'Testing Modules repository (Pull to Master)'
             condition: and(succeeded(), and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')))
-            continueOnError: true
+            continueOnError: false
             inputs:
               SourceCodePath: '$(system.defaultworkingdirectory)/modules'
               Recurse: true
@@ -102,7 +102,7 @@ stages:
               NestingDepthAverage: true
               ComplianceFailureAction: 'fail'
           - task: PSCodeHealth@0
-            displayName: 'Testing Script repository'
+            displayName: 'Testing Modules repository'
             condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
             continueOnError: true
             inputs:
