@@ -4,11 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
- paths:
-    exclude:
-    - archive
-    - pipelines
-    - azure-pipelines.yml
+ - develop
 
 name: $(versionnumber)-$(rev:r)
 
