@@ -4,16 +4,77 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+ paths:
+    exclude:
+    - archive
+    - pipelines
 
-pool:
-  vmImage: 'ubuntu-latest'
+name: $(versionnumber)-$(rev:r)
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  - name: 'scriptsPaths'
+    value: 'scripts'
+  - name: 'utilitiesPaths'
+    value: 'utilities'
+    value: '$(Build.Repository.LocalPath)\scripts\'
+  - name: 'utilitiesPath'
+    value: '$(Build.Repository.LocalPath)\utilities\'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage : Build
+    displayName : Build
+    jobs:
+      - job:
+        displayName: Main Build Phase
+        pool:
+          name: 'Azure Pipelines'
+          vmImage: 'windows-2019'
+          continueOnError: false
+        steps:
+          - task: PowerShell@2
+            displayName: 'Validate - Script files'
+            inputs:
+              filePath: './utilities/Invoke-ScriptAnalyzer.ps1'
+              arguments: '-Paths "$(scriptsPaths),$(utilitiesPaths)"'
+              pwsh: false
+          - task: PublishTestResults@2
+            displayName: 'Publish - Script Validation results'
+            inputs:
+              testResultsFormat: 'NUnit'
+              failTaskOnFailedTests: true
+              testResultsFiles: '**/ScriptAnalyzerResult.xml'
+          - task: PSCodeHealth@0
+            displayName: 'Testing Script repository'
+            inputs:
+              SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
+              Recurse: true
+              GenerateHtmlReport: true
+              HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'
+              SelectMetrics: true
+              LinesOfCodeAverage: true
+              ScriptAnalyzerErrors: true
+              ScriptAnalyzerWarnings: true
+              ScriptAnalyzerFindingsAverage: true
+              ComplexityAverage: true
+              NestingDepthAverage: true
+              ComplianceFailureAction: 'fail'
+          - task: versioncounter@1
+            displayName: 'Update - Version number (develop)'
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+            inputs:
+              VersionVariable: 'versionnumber'
+              UpdateMinorVersion: false
+              DevOpsPat: '$(devops-pipeline-pat)'
+          - task: versioncounter@1
+            displayName: 'Update - Version number (Pull Request)'
+            condition: and(succeeded(), and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')))
+            inputs:
+              VersionVariable: 'versionnumber'
+              UpdateMinorVersion: false
+              OnlyUpdateMinor: true
+              DevOpsPat: '$(devops-pipeline-pat)'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
