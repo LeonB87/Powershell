@@ -30,14 +30,14 @@ stages:
         pool:
           name: 'Azure Pipelines'
           vmImage: 'windows-2019'
-          continueOnError: false
+          continueOnError: true
         steps:
           - task: PowerShell@2
             displayName: 'Validate - Script files'
             inputs:
               filePath: './utilities/Invoke-ScriptAnalyzer.ps1'
               arguments: '-Paths "$(scriptsPaths),$(utilitiesPaths)"'
-              pwsh: false
+              pwsh: true
           - task: PublishTestResults@2
             displayName: 'Publish - Script Validation results'
             inputs:
