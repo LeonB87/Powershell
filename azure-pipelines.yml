@@ -64,7 +64,7 @@ stages:
               ComplianceFailureAction: 'fail'
           - task: PSCodeHealth@0
             displayName: 'Testing Script repository'
-            condition: and(succeeded(), and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')))
+            condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
             continueOnError: true
             inputs:
               SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
