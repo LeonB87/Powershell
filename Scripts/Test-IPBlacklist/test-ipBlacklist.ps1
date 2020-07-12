@@ -79,10 +79,10 @@
         if ($namespace) {
 
             If (Get-WmiObject -Namespace "root\cimv2" -Class "__NAMESPACE" | Where-Object {$_.Name -eq $Namespace}) {
-                write-output "The root\cimv2\$($Namespace) WMI namespace exists."
+                write-verbose "The root\cimv2\$($Namespace) WMI namespace exists."
             }
             Else {
-                write-output ("The root\cimv2\$($Namespace) WMI namespace does not exist.")
+                write-verbose ("The root\cimv2\$($Namespace) WMI namespace does not exist.")
                 $wmi = [wmiclass]"root\cimv2:__Namespace"
                 $newNamespace = $wmi.createInstance()
                 $newNamespace.name = $Namespace
@@ -94,18 +94,18 @@
             # Check to see if the class exists - if it doesn't, then let's create it
             # Check to see if the class exists - if it doesn't, then let's create it
             If (Get-WmiObject -List -Namespace "root\cimv2\$($Namespace)" | Where-Object {$_.Name -eq $Class}) {
-                Write-Output ("The $($Class) WMI class exists.")
+                write-verbose ("The $($Class) WMI class exists.")
                 # Because the class already exists, we need to make sure it's 'blank', and does not contain any pre-populated instances
                 # Hint: Pre-populated instances could have come from someone having already run this script.
                 $GetExistingInstances = Get-WmiObject -Namespace "root\cimv2\$($Namespace)" -Class $Class
                 If ($null -eq $GetExistingInstances) {
-                    write-output "There are no instances in this WMI class."
+                    write-verbose "There are no instances in this WMI class."
                 }
                 Else {
 
                 }
             }
-            write-output ("Now creating the $($Class)  WMI class.")
+            write-verbose ("Now creating the $($Class)  WMI class.")
             # Because the class doesn't exist, let's create it, and specify all of the appropriate properties.
             $subClass = New-Object System.Management.ManagementClass ("root\cimv2\$($Namespace)", [String]::Empty, $null);
             $subClass["__CLASS"] = $Class;
@@ -120,7 +120,7 @@
             $subClass.Put()
         } #END IF (Company)
         else {
-            write-output "Company variable is empty. we're not storing the found data to WMI."
+            write-verbose "Company variable is empty. we're not storing the found data to WMI."
         } #END ELSE (Company)
 
         #######################################################################################
@@ -161,11 +161,11 @@
 
         if ($blacklistedOn.Count -gt 0) {
             $list = $($blacklistedOn -join ', ')
-            Write-output "$IP is blacklisted on the following servers: $list"
+            write-verbose "$IP is blacklisted on the following servers: $list"
             $blacklisted = $true
         }
         else {
-            Write-output "$IP is not currently blacklisted on any server."
+            write-verbose "$IP is not currently blacklisted on any server."
 
             if ((Get-Date).Hour -eq 9) {
                 # The IP was not blacklisted, but it's between 9:00 and 10:00 AM (local time); you can send your sanity email here
@@ -181,7 +181,7 @@
             #
 
             $FilterURL = 'IP = "' + $IP + '"'
-            write-output $FilterURL
+            write-verbose $FilterURL
             $mb = Get-WmiObject -Class $Class -Filter $FilterURL -Namespace root\cimv2\$Namespace
             $mb | Remove-WMIObject
 
