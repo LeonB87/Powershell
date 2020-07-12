@@ -1,4 +1,4 @@
-﻿Function Test-IPBlacklist () {
+﻿
     #Requires -RunAsAdministrator
     <#
     .SYNOPSIS
@@ -43,13 +43,13 @@
             HelpMessage = "Supply the IP-Addres you would like to check if it's blacklisted"
         )]
         [Parameter(
-            Mandatory = $true,
+            Mandatory = $false,
             Position = 0,
             ValueFromPipeline = $true,
             ParameterSetName = "WMI",
             HelpMessage = "Supply the IP-Addres you would like to check if it's blacklisted"
         )]
-        [String]$IP,
+        [String]$IP = 127.0.0.1,
         [Parameter(Mandatory = $false,
             Position = 1,
             ValueFromPipeline = $false,
@@ -69,7 +69,6 @@
     )
 
     BEGIN {
-        Log-ScriptProgression -LogDirectory "\Logs\BlacklistCheck" -LogName BlackListCheck -LogRetentionDays 31
         [Datetime]$date = get-date
         $blacklisted = $false
         $list = "n.v.t."
@@ -157,7 +156,7 @@
                 $null = [System.Net.Dns]::GetHostEntry($fqdn)
                 $blacklistedOn += $server
             }
-            catch { throw $_ }
+            catch { }
         }
 
         if ($blacklistedOn.Count -gt 0) {
@@ -199,5 +198,3 @@
         return $blacklisted
         Stop-Transcript
     }
-
-}

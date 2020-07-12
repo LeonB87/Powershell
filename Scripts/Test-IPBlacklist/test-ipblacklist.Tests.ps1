@@ -3,7 +3,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 . "$here\$sut"
 
 Describe "false should be false" {
-    It "does something useful" {
-        $false | Should -Be $false
+    It "test localhost" {
+        .\Test-ipBlacklist -IP 127.0.0.1 | Should -Be $false
     }
 }
