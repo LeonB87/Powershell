@@ -74,7 +74,7 @@ stages:
               ScriptAnalyzerFindingsAverage: true
               ComplexityAverage: true
               NestingDepthAverage: true
-              ComplianceFailureAction: 'warning'
+              ComplianceFailureAction: 'fail'
           - task: AzureFileCopy@4
             displayName: 'AzureBlob File Copy'
             inputs:
