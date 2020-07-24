@@ -1,4 +1,4 @@
-
+Function Get-MailboxByEmailaddress{
     param(
         [string]$emailAddress,
         [string]$DomainController
@@ -12,3 +12,4 @@
     }
 
     return $oMailbox
+}
