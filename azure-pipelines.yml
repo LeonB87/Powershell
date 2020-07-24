@@ -63,7 +63,7 @@ stages:
             condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
             continueOnError: true
             inputs:
-              SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
+              SourceCodePath: 'Scripts'
               Recurse: true
               GenerateHtmlReport: true
               HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'
