@@ -10,7 +10,7 @@ name: $(versionnumber)-$(rev:r)
 
 variables:
   - name: 'scriptsPaths'
-    value: 'scripts'
+    value: 'powershell\scripts'
   - name: 'utilitiesPaths'
     value: 'utilities'
   - name: 'scriptPath'
