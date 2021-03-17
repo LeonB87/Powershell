@@ -46,7 +46,7 @@ stages:
             condition: and(succeeded(), and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')))
             continueOnError: false
             inputs:
-              SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
+              SourceCodePath: '$(system.defaultworkingdirectory)/powershell/scripts'
               Recurse: true
               GenerateHtmlReport: true
               HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'
@@ -63,7 +63,7 @@ stages:
             condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
             continueOnError: true
             inputs:
-              SourceCodePath: 'Scripts'
+              SourceCodePath: '$(system.defaultworkingdirectory)/powershell/scripts'
               Recurse: true
               GenerateHtmlReport: true
               HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'

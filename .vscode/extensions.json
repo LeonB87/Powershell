@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "davidanson.vscode-markdownlint",
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode.powershell",
+        "ms-azure-devops.azure-pipelines",
+        "mhutchie.git-graph",
+        "wengerk.highlight-bad-chars",
+        "bencoleman.armview",
+        "jkiviluoto.tws"
+    ]
+}
