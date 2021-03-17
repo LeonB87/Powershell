@@ -8,15 +8,11 @@
     Author: Maik van der Gaag
     Date: 27-03-2020
 
-
 .PARAMETER Paths
-    The folder that contains the json files
+    The folder that contains the powershell files
 
 .PARAMETER Local
     Is is a local run or online
-
-.NOTES
-    Version:        1.0.0;
 
 .EXAMPLE
     .\Invoke-ScriptAnalyzer.ps1 -Paths "C:\templates\"
@@ -126,7 +122,7 @@ BEGIN {
         $ModulesToInstall = @(
             @{
                 Name           = 'PSScriptAnalyzer'
-                MinimumVersion = '1.18.3'
+                MinimumVersion = '1.19.1'
                 Repository     = 'PSGallery'
             }
         )

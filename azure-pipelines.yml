@@ -4,21 +4,17 @@
 # https://aka.ms/yaml
 
 trigger:
- paths:
-    exclude:
-    - archive
-    - pipelines
-    - azure-pipelines.yml
+ - develop
 
 name: $(versionnumber)-$(rev:r)
 
 variables:
   - name: 'scriptsPaths'
-    value: 'scripts'
+    value: 'powershell\scripts'
   - name: 'utilitiesPaths'
     value: 'utilities'
   - name: 'scriptPath'
-    value: '$(Build.Repository.LocalPath)\scripts\'
+    value: '$(Build.Repository.LocalPath)\powershell\scripts\'
   - name: 'utilitiesPath'
     value: '$(Build.Repository.LocalPath)\utilities\'
 
@@ -48,9 +44,9 @@ stages:
           - task: PSCodeHealth@0
             displayName: 'Testing Script repository (Pull to Master)'
             condition: and(succeeded(), and(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master')))
-            continueOnError: true
+            continueOnError: false
             inputs:
-              SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
+              SourceCodePath: '$(system.defaultworkingdirectory)/powershell/scripts'
               Recurse: true
               GenerateHtmlReport: true
               HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'
@@ -67,7 +63,7 @@ stages:
             condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
             continueOnError: true
             inputs:
-              SourceCodePath: '$(system.defaultworkingdirectory)/scripts'
+              SourceCodePath: '$(system.defaultworkingdirectory)/powershell/scripts'
               Recurse: true
               GenerateHtmlReport: true
               HtmlReportPath: '$(Build.ArtifactStagingDirectory)\PSCodeHealthReport.html'
@@ -78,8 +74,7 @@ stages:
               ScriptAnalyzerFindingsAverage: true
               ComplexityAverage: true
               NestingDepthAverage: true
-              ComplianceFailureAction: 'warning'
-
+              ComplianceFailureAction: 'fail'
           - task: AzureFileCopy@4
             displayName: 'AzureBlob File Copy'
             inputs:
@@ -87,7 +82,8 @@ stages:
               azureSubscription: 'Azure Familie-Boers'
               Destination: AzureBlob
               storage: pscodehealth
-              ContainerName: pscodehealthcontainer
+              ContainerName: 'pscodehealthcontainer'
+              BlobPrefix: 'develop-PSCodeHealthReport.html'
           - task: versioncounter@1
             displayName: 'Update - Version number (develop)'
             condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
