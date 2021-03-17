@@ -14,7 +14,7 @@ variables:
   - name: 'utilitiesPaths'
     value: 'utilities'
   - name: 'scriptPath'
-    value: '$(Build.Repository.LocalPath)\scripts\'
+    value: '$(Build.Repository.LocalPath)\powershell\scripts\'
   - name: 'utilitiesPath'
     value: '$(Build.Repository.LocalPath)\utilities\'
 
