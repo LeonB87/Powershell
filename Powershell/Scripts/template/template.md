@@ -1,3 +1,10 @@
+- [Synopsis](#synopsis) 
+- [Information](#information) 
+- [Examples](#examples) 
+     * [Example 1](#example-1) 
+- [Parameters](#parameters) 
+     * [stringParameter](#stringparameter) 
+
 ## Synopsis
 This is a powershell script template
 
@@ -40,4 +47,11 @@ This is a string parameter as an example
 | Position : | named|
 | Required : | false|
 
+
+- [Synopsis](#synopsis) 
+- [Information](#information) 
+- [Examples](#examples) 
+     * [Example 1](#example-1) 
+- [Parameters](#parameters) 
+     * [stringParameter](#stringparameter) 
 

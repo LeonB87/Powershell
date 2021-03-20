@@ -1,3 +1,10 @@
+- [Synopsis](#synopsis) 
+- [Information](#information) 
+- [Examples](#examples) 
+     * [Example 1](#example-1) 
+- [Parameters](#parameters) 
+     * [InputString](#inputstring) 
+
 ## Synopsis
 Script to generate TOC strings that work on Github
 
@@ -40,12 +47,12 @@ This is the input string that the script will convert. Must contains between 1 a
 | PipelineInput : | false|
 | Position : | 1|
 | Required : | true|
-     * [Synopsis](#Synopsis) 
-     * [Information](#Information) 
-     * [Examples](#Examples) 
-         + [Example 1](#Example-1) 
-     * [Parameters](#Parameters) 
-         + [InputString](#InputString) 
 
 
+- [Synopsis](#synopsis) 
+- [Information](#information) 
+- [Examples](#examples) 
+     * [Example 1](#example-1) 
+- [Parameters](#parameters) 
+     * [InputString](#inputstring) 
 
