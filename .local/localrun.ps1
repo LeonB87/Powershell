@@ -18,8 +18,12 @@ PROCESS {
     Write-Host "### Invoke script analyzer" -ForegroundColor Blue
     ./utilities/Invoke-ScriptAnalyzer.ps1  -Paths "Powershell\scripts" -Local
 
+
+    write-host "### Copying GitHUB TOC script to utilities folder."
+    Copy-Item -Path .\Powershell\Scripts\Generate-GithubTOC\Generate-githubTOC.ps1 -Destination .\utilities -Force
+
     Write-Host "### Invoke new Markdown documentation - utilities" -ForegroundColor Blue
-    ./utilities/New-MDPowerShellScripts.ps1 -ScriptFolder "..\Powershell\scripts\" -OutputFolder "..\Powershell\scripts\"  -KeepStructure $true
+    ./utilities/New-MDPowerShellScripts.ps1 -ScriptFolder ".\Powershell\scripts\" -OutputFolder ".\Powershell\scripts\"  -KeepStructure $true
 
 }
 END {
