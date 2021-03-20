@@ -94,7 +94,7 @@ PROCESS {
         foreach ($script in $scripts) {
             if (!$exclude.Contains($script.Directory.Name)) {
                 Write-Information ("Documenting file: $($script.FullName)")
-
+                if ($WikiTOCStyle -eq "GitHub") {[string]$githubTOC = ""}
 
                 if ($KeepStructure) {
                     if ($script.DirectoryName -ne $ScriptFolder) {
@@ -124,6 +124,9 @@ PROCESS {
                             ("[[_TOC_]]`n") | Out-File -FilePath $outputFile
                             "`n" | Out-File -FilePath $outputFile -Append
                         }
+                        elseif ($wikiTOCStyle -eq "Github") {
+                            $githubTOC = "# Table of Contents `n`r"
+                        }
                     }
 
                     #synopsis
@@ -135,6 +138,12 @@ PROCESS {
 
                         if ($IncludeWikiSummary) {
                             ("$($help.Synopsis)") | Out-File -FilePath $WikiSummaryFilename -Append
+                        }
+                        if ($IncludeWikiTOC) {
+                            if ($WikiTOCStyle -eq "Github") {
+
+                                $githubTOC = $githubTOC + ("$(.\utilities\Generate-githubTOC.ps1 -InputString ("# Synopsis")) `n")
+                            }
                         }
                     }
                     else {
@@ -162,6 +171,12 @@ PROCESS {
                             ("**$($items[0]):** $($items[1])`n") | Out-File -FilePath $outputFile -Append
                         }
                         "`n" | Out-File -FilePath $outputFile -Append
+
+                        if ($IncludeWikiTOC) {
+                            if ($WikiTOCStyle -eq "Github") {
+                                $githubTOC = $githubTOC + ("$(.\utilities\Generate-githubTOC.ps1 -InputString ("# Information")) `n")
+                            }
+                        }
                     }
                     else {
                         Write-Warning -Message ("Notes not defined in file $($script.fullname)")
@@ -181,9 +196,19 @@ PROCESS {
                     if ($help.Examples) {
                         ("## Examples") | Out-File -FilePath $outputFile -Append
                         "`n" | Out-File -FilePath $outputFile -Append
+                        if ($IncludeWikiTOC) {
+                            if ($WikiTOCStyle -eq "Github") {
+                                $githubTOC = $githubTOC + ("$(.\utilities\Generate-githubTOC.ps1 -InputString ("# Examples")) `n")
+                            }
+                        }
                         forEach ($item in $help.Examples.Example) {
                             $title = $item.title.Replace("--------------------------", "").Replace("EXAMPLE", "Example")
                             ("### $($title)") | Out-File -FilePath $outputFile -Append
+                            if ($IncludeWikiTOC) {
+                                if ($WikiTOCStyle -eq "Github") {
+                                    $githubTOC = $githubTOC + ("$(.\utilities\Generate-githubTOC.ps1 -InputString ("## $($title)")) `n")
+                                }
+                            }
                             if ($item.Code) {
                                 ("``````PowerShell`r`n $($item.Code) `r`n``````") | Out-File -FilePath $outputFile -Append
                             }
@@ -195,8 +220,18 @@ PROCESS {
 
                     if ($help.Parameters) {
                         ("## Parameters") | Out-File -FilePath $outputFile -Append
+                        if ($IncludeWikiTOC) {
+                            if ($WikiTOCStyle -eq "Github") {
+                                $githubTOC = $githubTOC + ("$(.\utilities\Generate-githubTOC.ps1 -InputString ("# Parameters")) `n")
+                            }
+                        }
                         forEach ($item in $help.Parameters.Parameter) {
                             ("### $($item.name)") | Out-File -FilePath $outputFile -Append
+                            if ($IncludeWikiTOC) {
+                                if ($WikiTOCStyle -eq "Github") {
+                                    $githubTOC = $githubTOC + ("$(.\utilities\Generate-githubTOC.ps1 -InputString ("## $($item.name)")) `n")
+                                }
+                            }
                             $item.description[0].text | Out-File -FilePath $outputFile -Append
                             ("| | |") | Out-File -FilePath $outputFile -Append
                             ("|-|-|") | Out-File -FilePath $outputFile -Append
@@ -208,6 +243,15 @@ PROCESS {
                             }
                             "`n" | Out-File -FilePath $outputFile -Append
                         }
+                        if ($IncludeWikiTOC) {
+                            if ($WikiTOCStyle -eq "Github") {
+                                $rawContent = Get-Content $outputFile
+                                $githubTOC | Out-File -FilePath $outputFile -Force
+                                $rawContent | Out-File -FilePath $outputFile -Append
+                            }
+                        }
+                        $rawContent = Get-Content $outputFile
+                        $githubTOC | Out-File -FilePath $outputFile -Append
                     }
                     else {
                         Write-Warning -Message "Parameters not defined in file $($script.fullname)"
