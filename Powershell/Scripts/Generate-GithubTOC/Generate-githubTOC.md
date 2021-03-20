@@ -40,5 +40,12 @@ This is the input string that the script will convert. Must contains between 1 a
 | PipelineInput : | false|
 | Position : | 1|
 | Required : | true|
+     * [Synopsis](#Synopsis) 
+     * [Information](#Information) 
+     * [Examples](#Examples) 
+         + [Example 1](#Example-1) 
+     * [Parameters](#Parameters) 
+         + [InputString](#InputString) 
+
 
 
