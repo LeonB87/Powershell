@@ -1,4 +1,5 @@
-- [Synopsis](#synopsis) 
+# Table of Contents 
+- [Synopsis](#synopsis) 
 - [Information](#information) 
 - [Examples](#examples) 
      * [Example 1](#example-1) 
@@ -48,7 +49,8 @@ This is a string parameter as an example
 | Required : | false|
 
 
-- [Synopsis](#synopsis) 
+# Table of Contents 
+- [Synopsis](#synopsis) 
 - [Information](#information) 
 - [Examples](#examples) 
      * [Example 1](#example-1) 

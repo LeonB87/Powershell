@@ -33,27 +33,27 @@ PROCESS {
         "^#\s\S*" {
             Write-Verbose ("Header level 1 detected")
             $str = $InputString.Split("#")[1].Trim()
-            $output = ("- [$($str)](#$($str.replace(' ','-')))")
+            $output = ("- [$($str)](#$($str.replace(' ','-').ToLower()))")
         }
         "^##\s\S*" {
             Write-Verbose ("Header level 2 detected")
             $str = $InputString.Split("##")[1].Trim()
-            $output = ("     * [$($str)](#$($str.replace(' ','-')))")
+            $output = ("     * [$($str)](#$($str.replace(' ','-').ToLower()))")
         }
         "^###\s\S*" {
             Write-Verbose ("Header level 3 detected")
             $str = $InputString.Split("###")[1].Trim()
-            $output = ("         + [$($str)](#$($str.replace(' ','-')))")
+            $output = ("         + [$($str)](#$($str.replace(' ','-').ToLower()))")
         }
         "^####\s\S*" {
             Write-Verbose ("Header level 4 detected")
             $str = $InputString.Split("####")[1].Trim()
-            $output = ("             - [$($str)](#$($str.replace(' ','-')))")
+            $output = ("             - [$($str)](#$($str.replace(' ','-').ToLower()))")
         }
         "^#####\s\S*" {
             Write-Verbose ("Header level 5 detected")
             $str = $InputString.Split("#####")[1].Trim()
-            $output = ("                 * [$($str)](#$($str.replace(' ','-')))")
+            $output = ("                 * [$($str)](#$($str.replace(' ','-').ToLower()))")
         }
         Default {
             Write-verbose ("unknown switch condition detected")

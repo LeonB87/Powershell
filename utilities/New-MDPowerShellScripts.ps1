@@ -82,6 +82,8 @@ PROCESS {
                 $WikiSummaryFilename = (".\powershellScripts.md")
             }
 
+            New-Item -Path $WikiSummaryFilename -Force
+
             if ($IncludeWikiTOC) {
                 if ($WikiTOCStyle -eq "AzureDevOps") {
                     ("[[_TOC_]]`n") | Out-File -FilePath $WikiSummaryFilename
@@ -137,11 +139,10 @@ PROCESS {
 
 
                         if ($IncludeWikiSummary) {
-                            ("$($help.Synopsis)") | Out-File -FilePath $WikiSummaryFilename -Append
+                            ("$($help.Synopsis) `r `n") | Out-File -FilePath $WikiSummaryFilename -Append
                         }
                         if ($IncludeWikiTOC) {
                             if ($WikiTOCStyle -eq "Github") {
-
                                 $githubTOC = $githubTOC + ("$(.\utilities\Generate-githubTOC.ps1 -InputString ("# Synopsis")) `n")
                             }
                         }

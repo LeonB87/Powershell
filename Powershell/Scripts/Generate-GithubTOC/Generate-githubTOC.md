@@ -1,4 +1,5 @@
-- [Synopsis](#synopsis) 
+# Table of Contents 
+- [Synopsis](#synopsis) 
 - [Information](#information) 
 - [Examples](#examples) 
      * [Example 1](#example-1) 
@@ -49,7 +50,8 @@ This is the input string that the script will convert. Must contains between 1 a
 | Required : | true|
 
 
-- [Synopsis](#synopsis) 
+# Table of Contents 
+- [Synopsis](#synopsis) 
 - [Information](#information) 
 - [Examples](#examples) 
      * [Example 1](#example-1) 
