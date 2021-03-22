@@ -1,10 +1,10 @@
-
 <#
     .SYNOPSIS
     Script to create a Tree view of a folder
 
     .DESCRIPTION
-    Script to create a Tree view of a folder
+    Script to create a Tree view of a folder. It recurses through the folder and will collect all folders and files.
+    It returns a Powershell Object by default and optionally Json
 
     .PARAMETER Path
     the root path you want to create a treesize off
@@ -37,7 +37,7 @@ param (
 )
 BEGIN {
     $FolderStructure = @()
-    $fileArray = @()
+    $CurrentFolderContent = @()
 }
 PROCESS {
     $folderItems = Get-ChildItem -Path $Path
@@ -46,14 +46,25 @@ PROCESS {
 
         if ($item.PSIsContainer -eq "True") {
             $subtree = Get-FolderItems -Path $item.FullName
-            $FolderStructure = $FolderStructure + @{$item.name = $subtree}
+            $FolderObject = [PSCustomObject]@{
+                Name    = $item.name
+                Type    = "Folder"
+                content = $subtree
+
+            }
+            $CurrentFolderContent += $FolderObject
         }
         else {
             #is not a folder
-            $fileArray = $fileArray + ($item.name)
+            $FileObject = [PSCustomObject]@{
+                Name = $item.name
+                Type = "File"
+            }
+
+            $CurrentFolderContent += $FileObject
         }
     }
-    $FolderStructure += $fileArray
+    $FolderStructure += ($CurrentFolderContent)
 }
 END {
     switch ($outputType) {
