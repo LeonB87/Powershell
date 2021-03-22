@@ -114,7 +114,7 @@ PROCESS {
                 $help = Get-Help $script.FullName -ErrorAction "SilentlyContinue" -Detailed
 
                 if ($IncludeWikiSummary) {
-                    ("[# $($script.Name)]($($outputFile)) `r ") | Out-File -FilePath $WikiSummaryFilename -Append
+                    ("### $($script.Name) `r ") | Out-File -FilePath $WikiSummaryFilename -Append
                 }
 
                 if ($help) {

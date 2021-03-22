@@ -3,14 +3,18 @@
 # Powershell script report 
 [Develop Report Script](https://pscodehealth.blob.core.windows.net/pscodehealthcontainer/develop-PSCodeHealthReport.html) 
 
-# Scripts 
-Summary of scripts
-[# Generate-githubTOC.ps1]() 
+## Scripts 
+ 
+Summary of scripts 
+
+---
+
+### Generate-githubTOC.ps1 
  
 Script to generate TOC strings that work on Github 
  
 
-[# template.ps1](.\Powershell\scripts\/Generate-GithubTOC/Generate-githubTOC.md) 
+### template.ps1 
  
 This is a powershell script template 
  

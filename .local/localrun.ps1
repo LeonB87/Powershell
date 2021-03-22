@@ -35,8 +35,9 @@ PROCESS {
     ("[![Build Status](https://dev.azure.com/familie-boers/Powershell/_apis/build/status/LeonB87.Powershell-Scripts?branchName=develop)](https://dev.azure.com/familie-boers/Powershell/_build/latest?definitionId=10&branchName=develop) `r`n") | Out-File $readmefile -Force
     ("# Powershell script report `r") | Out-File $readmefile -Append
     ("[Develop Report Script](https://pscodehealth.blob.core.windows.net/pscodehealthcontainer/develop-PSCodeHealthReport.html) `r`n")  | Out-File $readmefile -Append
-    ("# Scripts `r") | Out-File $readmefile -Append
-    ("Summary of scripts") | Out-File $readmefile -Append
+    ("## Scripts `r`n ") | Out-File $readmefile -Append
+    ("Summary of scripts `r`n") | Out-File $readmefile -Append
+    ("---`r`n") | Out-File $readmefile -Appen
     $scriptTOC | Out-File $readmefile -Append
 }
 END {
