@@ -5,12 +5,12 @@
 
 # Scripts 
 Summary of scripts
-# Generate-githubTOC.ps1 
+[# Generate-githubTOC.ps1]() 
  
 Script to generate TOC strings that work on Github 
  
 
-# template.ps1 
+[# template.ps1](.\Powershell\scripts\/Generate-GithubTOC/Generate-githubTOC.md) 
  
 This is a powershell script template 
  
