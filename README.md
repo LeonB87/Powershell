@@ -14,6 +14,11 @@ Summary of scripts
 Script to generate TOC strings that work on Github 
  
 
+### Get-FolderStructure.ps1 
+ 
+Script to create a Tree view of a folder 
+ 
+
 ### template.ps1 
  
 This is a powershell script template 
