@@ -50,11 +50,3 @@ This is the input string that the script will convert. Must contains between 1 a
 | Required : | true|
 
 
-# Table of Contents 
-- [Synopsis](#synopsis) 
-- [Information](#information) 
-- [Examples](#examples) 
-     * [Example 1](#example-1) 
-- [Parameters](#parameters) 
-     * [InputString](#inputstring) 
-

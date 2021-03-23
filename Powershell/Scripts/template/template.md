@@ -49,11 +49,3 @@ This is a string parameter as an example
 | Required : | false|
 
 
-# Table of Contents 
-- [Synopsis](#synopsis) 
-- [Information](#information) 
-- [Examples](#examples) 
-     * [Example 1](#example-1) 
-- [Parameters](#parameters) 
-     * [stringParameter](#stringparameter) 
-

@@ -100,7 +100,7 @@ PROCESS {
 
                 if ($KeepStructure) {
                     if ($script.DirectoryName -ne $ScriptFolder) {
-                        $newfolder = $OutputFolder + "/" + $script.Directory.Name
+                        $newfolder = $OutputFolder + "" + $script.Directory.Name
                         if (!(Test-Path $newfolder)) {
                             Write-Information ("Output folder for item does not exists creating the folder: $($newfolder)")
                             New-Item -Path $OutputFolder -Name $script.Directory.Name -ItemType "directory"
@@ -118,7 +118,7 @@ PROCESS {
                 }
 
                 if ($help) {
-                    $outputFile = ("$($newfolder)/$($script.BaseName)$($scriptNameSuffix)")
+                    $outputFile = ("$($newfolder)\$($script.BaseName)$($scriptNameSuffix)")
                     Out-File -FilePath $outputFile
 
                     if ($IncludeWikiTOC) {
@@ -251,8 +251,6 @@ PROCESS {
                                 $rawContent | Out-File -FilePath $outputFile -Append
                             }
                         }
-                        $rawContent = Get-Content $outputFile
-                        $githubTOC | Out-File -FilePath $outputFile -Append
                     }
                     else {
                         Write-Warning -Message "Parameters not defined in file $($script.fullname)"

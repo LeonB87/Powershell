@@ -29,7 +29,8 @@ Script to create a Tree view of a folder
 
 
 ## Description
-Script to create a Tree view of a folder
+Script to create a Tree view of a folder. It recurses through the folder and will collect all folders and files.
+It returns a Powershell Object by default and optionally Json
 
 
 ## Examples
@@ -67,14 +68,4 @@ Accepts the following input;  Object (default), Json
 | Position : | 2|
 | Required : | false|
 
-
-# Table of Contents 
-- [Synopsis](#synopsis) 
-- [Information](#information) 
-- [Examples](#examples) 
-     * [Example 1](#example-1) 
-     * [Example 2](#example-2) 
-- [Parameters](#parameters) 
-     * [Path](#path) 
-     * [outputType](#outputtype) 
 
