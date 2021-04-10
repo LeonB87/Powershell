@@ -108,5 +108,5 @@ PROCESS {
     }
 }
 END {
-    return $output
+    return $TOC
 }

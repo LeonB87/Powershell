@@ -130,9 +130,9 @@ PROCESS {
 
                     #synopsis
                     if ($help.Synopsis) {
-                        ("## Synopsis") | Out-File -FilePath $outputFile -Append
+                        ("`r## Synopsis`n") | Out-File -FilePath $outputFile -Append
                         ("$($help.Synopsis)") | Out-File -FilePath $outputFile -Append
-                        "`n" | Out-File -FilePath $outputFile -Append
+
 
 
                         if ($IncludeWikiSummary) {
@@ -148,8 +148,7 @@ PROCESS {
                         $capturedGetHelpOutput = $help.Syntax | Out-String
                         $parameters = $capturedGetHelpOutput.split($script.name).Trim()[1]
                         $syntaxString = (".\$($script.name) $($parameters)")
-                        ("``````PowerShell`n $($syntaxString)`n``````") | Out-File -FilePath $outputFile -Append
-                        "`n" | Out-File -FilePath $outputFile -Append
+                        ("`r``````PowerShell`r $($syntaxString)`r``````") | Out-File -FilePath $outputFile -Append
                     }
                     else {
                         Write-Warning -Message ("Syntax not defined in file $($script.fullname)")
@@ -157,7 +156,7 @@ PROCESS {
 
                     #notes (seperated by (name): and (value);)
                     if ($help.alertSet) {
-                        ("## Information") | Out-File -FilePath $outputFile -Append
+                        ("`r## Information`r") | Out-File -FilePath $outputFile -Append
                         $text = $help.alertSet.alert.Text.Split(';', $option)
                         foreach ($line in $text) {
                             $items = $line.Trim().Split(':', $option)
@@ -171,9 +170,9 @@ PROCESS {
 
                     #description
                     if ($help.Description) {
-                        "## Description" | Out-File -FilePath $outputFile -Append
+                        "## Description`r" | Out-File -FilePath $outputFile -Append
                         $help.Description.Text | Out-File -FilePath $outputFile -Append
-                        "`n" | Out-File -FilePath $outputFile -Append
+                        "`r" | Out-File -FilePath $outputFile -Append
                     }
                     else {
                         Write-Warning -Message "Description not defined in file $($script.fullname)"
@@ -181,14 +180,13 @@ PROCESS {
 
                     #examples
                     if ($help.Examples) {
-                        ("## Examples") | Out-File -FilePath $outputFile -Append
-                        "`n" | Out-File -FilePath $outputFile -Append
+                        ("## Examples`r") | Out-File -FilePath $outputFile -Append
 
                         forEach ($item in $help.Examples.Example) {
-                            $title = $item.title.Replace("--------------------------", "").Replace("EXAMPLE", "Example")
-                            ("### $($title)") | Out-File -FilePath $outputFile -Append
+                            $title = $item.title.Replace("--------------------------", "").Replace("EXAMPLE", "Example").trim()
+                            ("### $($title)`r") | Out-File -FilePath $outputFile -Append
                             if ($item.Code) {
-                                ("``````PowerShell`r`n $($item.Code) `r`n``````") | Out-File -FilePath $outputFile -Append
+                                ("``````PowerShell`r`n $($item.Code)`r`n```````r") | Out-File -FilePath $outputFile -Append
                             }
                         }
                     }
@@ -197,9 +195,9 @@ PROCESS {
                     }
 
                     if ($help.Parameters) {
-                        ("## Parameters") | Out-File -FilePath $outputFile -Append
+                        ("## Parameters`r") | Out-File -FilePath $outputFile -Append
                         forEach ($item in $help.Parameters.Parameter) {
-                            ("### $($item.name)") | Out-File -FilePath $outputFile -Append
+                            ("### $($item.name)`r") | Out-File -FilePath $outputFile -Append
                             $item.description[0].text | Out-File -FilePath $outputFile -Append
                             ("| | |") | Out-File -FilePath $outputFile -Append
                             ("|-|-|") | Out-File -FilePath $outputFile -Append
@@ -209,7 +207,6 @@ PROCESS {
                                     ("| $arrParameterProperty : | $($item.$arrParameterProperty)|") | Out-File -FilePath $outputFile -Append
                                 }
                             }
-                            "`n" | Out-File -FilePath $outputFile -Append
                         }
                         if ($IncludeWikiTOC) {
                             if ($WikiTOCStyle -eq "Github") {
@@ -217,7 +214,7 @@ PROCESS {
                                 $TOC = .\utilities\Generate-githubTOC.ps1 -Path $outputFile
                                 $rawContent = Get-Content $outputFile
                                 $TOC | Out-File -FilePath $outputFile
-                                "`n" | Out-File -FilePath $outputFile -Append
+                                #"`n" | Out-File -FilePath $outputFile -Append
                                 $rawContent | Out-File -FilePath $outputFile -Append
                             }
                         }
