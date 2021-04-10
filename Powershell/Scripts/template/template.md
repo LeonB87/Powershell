@@ -1,21 +1,21 @@
-# Table of Contents 
-- [Synopsis](#synopsis) 
-- [Information](#information) 
-- [Examples](#examples) 
-     * [Example 1](#example-1) 
-- [Parameters](#parameters) 
-     * [stringParameter](#stringparameter) 
+- [Synopsis](#synopsis)
+- [Information](#information)
+- [Description](#description)
+- [Examples](#examples)
+     * [Example 1](#example-1)
+- [Parameters](#parameters)
+     * [stringParameter](#stringparameter)
 
 ## Synopsis
-This is a powershell script template
 
+This is a powershell script template
 
 ```PowerShell
  .\template.ps1 [-stringParameter <String>] [<CommonParameters>]
 ```
 
-
 ## Information
+
 **Version:**         1.0.0
 
 **Author:**          Léon Boers
@@ -27,18 +27,22 @@ This is a powershell script template
 
 
 ## Description
+
 This is a very simple powershell script template to get started
 
 
 ## Examples
 
+### Example 1
 
-###  Example 1 
 ```PowerShell
- .\template -stringParameter "Hello" 
+ .\template -stringParameter "Hello"
 ```
+
 ## Parameters
+
 ### stringParameter
+
 This is a string parameter as an example
 | | |
 |-|-|
@@ -47,5 +51,3 @@ This is a string parameter as an example
 | PipelineInput : | false|
 | Position : | named|
 | Required : | false|
-
-

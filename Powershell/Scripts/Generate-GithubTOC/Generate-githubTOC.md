@@ -1,22 +1,22 @@
-# Table of Contents 
-- [Synopsis](#synopsis) 
-- [Information](#information) 
-- [Examples](#examples) 
-     * [Example 1](#example-1) 
-- [Parameters](#parameters) 
-     * [InputString](#inputstring) 
+- [Synopsis](#synopsis)
+- [Information](#information)
+- [Description](#description)
+- [Examples](#examples)
+     * [Example 1](#example-1)
+- [Parameters](#parameters)
+     * [Path](#path)
 
 ## Synopsis
-Script to generate TOC strings that work on Github
 
+Script to generate TOC that works on Github
 
 ```PowerShell
- .\Generate-githubTOC.ps1 [-InputString] <String> [<CommonParameters>]
+ .\Generate-githubTOC.ps1 [-Path] <String> [<CommonParameters>]
 ```
 
-
 ## Information
-**Version:**         1.0.0
+
+**Version:**         1.1.0
 
 **Author:**          Léon Boers
 
@@ -24,23 +24,29 @@ Script to generate TOC strings that work on Github
 
 **Purpose/Change:**  Initial script development
 
+**Version:** 1.1.0
+
 
 
 ## Description
-Script to generate TOC strings that work on Github. It uses a single input string and converts it to a link that works on Github.
+
+Script to generate TOC that work on Github. It reads a target Markdown file and convert the headers to a TOC with a link that works on Github.
 This script originated because I wanted an automated way to include an TOC that I've used on Azure DevOps. Unfortunately, [[_TOC_]] doesn't work on Github.
 
 
 ## Examples
 
+### Example 1
 
-###  Example 1 
 ```PowerShell
- Generate-GithubTOC -InputString '## header 2' 
+ .\Generate-GithubTOC -Path '\scripts\MyMarkdown.md'
 ```
+
 ## Parameters
-### InputString
-This is the input string that the script will convert. Must contains between 1 and 5 # characters.
+
+### Path
+
+This is the Path to a Markdown file that you want to generate a TOC for. Must contains between 1 and 5 # characters.
 | | |
 |-|-|
 | Type: | String |
@@ -48,5 +54,3 @@ This is the input string that the script will convert. Must contains between 1 a
 | PipelineInput : | false|
 | Position : | 1|
 | Required : | true|
-
-

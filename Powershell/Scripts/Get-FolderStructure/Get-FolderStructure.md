@@ -1,23 +1,23 @@
-# Table of Contents 
-- [Synopsis](#synopsis) 
-- [Information](#information) 
-- [Examples](#examples) 
-     * [Example 1](#example-1) 
-     * [Example 2](#example-2) 
-- [Parameters](#parameters) 
-     * [Path](#path) 
-     * [outputType](#outputtype) 
+- [Synopsis](#synopsis)
+- [Information](#information)
+- [Description](#description)
+- [Examples](#examples)
+     * [Example 1](#example-1)
+     * [Example 2](#example-2)
+- [Parameters](#parameters)
+     * [Path](#path)
+     * [outputType](#outputtype)
 
 ## Synopsis
-Script to create a Tree view of a folder
 
+Script to create a Tree view of a folder
 
 ```PowerShell
  .\Get-FolderStructure.ps1 [-Path] <String> [[-outputType] <String>] [<CommonParameters>]
 ```
 
-
 ## Information
+
 **Version:**         1.0.0
 
 **Author:**          Léon Boers
@@ -29,23 +29,29 @@ Script to create a Tree view of a folder
 
 
 ## Description
+
 Script to create a Tree view of a folder. It recurses through the folder and will collect all folders and files.
 It returns a Powershell Object by default and optionally Json
 
 
 ## Examples
 
+### Example 1
 
-###  Example 1 
 ```PowerShell
- .\Get-FolderStructure -Path "C:\MyFolder" 
+ .\Get-FolderStructure -Path "C:\MyFolder"
 ```
-###  Example 2 
+
+### Example 2
+
 ```PowerShell
- .\Get-FolderStructure -Path ".\" -outputType Json 
+ .\Get-FolderStructure -Path ".\" -outputType Json
 ```
+
 ## Parameters
+
 ### Path
+
 the root path you want to create a treesize off
 | | |
 |-|-|
@@ -54,9 +60,8 @@ the root path you want to create a treesize off
 | PipelineInput : | false|
 | Position : | 1|
 | Required : | true|
-
-
 ### outputType
+
 The defined output. This defaults to an Object.
 Accepts the following input;  Object (default), Json
 | | |
@@ -67,5 +72,3 @@ Accepts the following input;  Object (default), Json
 | PipelineInput : | false|
 | Position : | 2|
 | Required : | false|
-
-

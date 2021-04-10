@@ -11,7 +11,7 @@ Summary of scripts
 
 ### Generate-githubTOC.ps1 
  
-Script to generate TOC strings that work on Github 
+Script to generate TOC that works on Github 
  
 
 ### Get-FolderStructure.ps1 
