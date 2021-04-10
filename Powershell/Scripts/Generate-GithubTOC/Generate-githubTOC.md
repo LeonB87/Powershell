@@ -39,7 +39,7 @@ This script originated because I wanted an automated way to include an TOC that 
 ### Example 1
 
 ```PowerShell
- Generate-GithubTOC -Path '\scripts\MyMarkdown.md
+ .\Generate-GithubTOC -Path '\scripts\MyMarkdown.md'
 ```
 
 ## Parameters

@@ -10,7 +10,7 @@
     This is the Path to a Markdown file that you want to generate a TOC for. Must contains between 1 and 5 # characters.
 
     .EXAMPLE
-    Generate-GithubTOC -Path '\scripts\MyMarkdown.md
+    .\Generate-GithubTOC -Path '\scripts\MyMarkdown.md'
 
     .NOTES
     Version:        1.1.0;
