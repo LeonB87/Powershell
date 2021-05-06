@@ -11,7 +11,10 @@ function get-azuredomainsDmarc {
         [string]$customDNS,
 
         [Parameter(Mandatory = $false)]
-        [string]$TenantId
+        [string]$TenantId,
+
+        [Parameter(Mandatory = $true)]
+        [string]$domainName
     )
     BEGIN {
         function Get-DnsRecords {
@@ -36,25 +39,28 @@ function get-azuredomainsDmarc {
                 [string]$Filter,
 
                 # Record Type
-                [string]$dnsRecordType = "txt"
+                [string]$dnsRecordType = "txt",
+
+                #Value Field
+                [string]$valueField = "Strings"
             )
             process {
                 $params = @{
                     Type        = $dnsRecordType
                     Name        = $DomainName
-                    ErrorAction = "Stop"
+                    ErrorAction = "SilentlyContinue"
                 }
                 if ($Server) {
                     $params.Add("Server", $Server)
                 }
                 try {
-                    $dns = Resolve-DnsName @params -ErrorAction SilentlyContinue
+                    $dns = Resolve-DnsName @params
 
                     if ($filter) {
                         $dns = $dns | Where-Object Strings -Match $Filter
                     }
 
-                    $returnObject = $dns | Select-Object @{Name = "DomainName"; Expression = { $_.Name } }, @{Name = "Record"; Expression = { $_.Strings } }
+                    $returnObject = $dns | Select-Object @{Name = "DomainName"; Expression = { $_.Name } }, @{Name = "Record"; Expression = { $_.$valueField } }
                 }
                 catch {
                     Write-Warning $_
@@ -66,19 +72,23 @@ function get-azuredomainsDmarc {
     }
     Process {
         # This returns the SPF Record
-        #Get-DnsRecords -DomainName "familie-boers.nl" -Filter "spf1"
+        Get-DnsRecords -DomainName $($domainName) -Filter "spf1"
 
         # This returns the Dmarc record
-        #Get-DnsRecords -DomainName "_dmarc.familie-boers.nl"
+        Get-DnsRecords -DomainName ("_dmarc.$($domainName)")
 
-        # TODO: Get DKIM Records
-        Get-DnsRecords -DomainName "selector1._domainkey.3fifty.eu" -dnsRecordType "cname"
+        # This returns Selector1
+        Get-DnsRecords -DomainName ("selector1._domainkey.$($domainName)") -dnsRecordType "cname" -valueField "NameHost"
 
-        # TODO: Get Dkim settings
+        # This returns Selector1
+        Get-DnsRecords -DomainName ("selector2._domainkey.$($domainName)") -dnsRecordType "cname" -valueField "NameHost"
+
     }
     END {
 
     }
 }
 
-get-azuredomainsDmarc
+get-azuredomainsDmarc -domainName "3fifty.eu"
+
+get-azuredomainsDmarc -domainName "westerdijkstraat.nl"
