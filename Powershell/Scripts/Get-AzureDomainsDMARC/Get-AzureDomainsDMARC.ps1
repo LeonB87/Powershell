@@ -10,11 +10,9 @@ function get-azuredomainsDmarc {
         [Parameter(Mandatory = $false)]
         [string]$customDNS,
 
-        [Parameter(Mandatory = $false)]
-        [string]$TenantId,
-
         [Parameter(Mandatory = $true)]
-        [string]$domainName
+        [string]$TenantId
+
     )
     BEGIN {
         function Get-DnsRecords {
@@ -69,26 +67,69 @@ function get-azuredomainsDmarc {
                 return $returnObject
             }
         } # END function Get-DnsRecords
+
+
+        if (((Get-AzTenant).Id -ne $TenantId)) {
+            Disconnect-AzAccount
+            Connect-AzAccount -Tenant $TenantId -UseDeviceAuthentication
+        }
+
+        $exportFileName = (".\AAD-Domains-$((Get-Date -Format "dd-MM-yyyy")).csv")
     }
     Process {
-        # This returns the SPF Record
-        Get-DnsRecords -DomainName $($domainName) -Filter "spf1"
 
-        # This returns the Dmarc record
-        Get-DnsRecords -DomainName ("_dmarc.$($domainName)")
+        $domains = @()
+        $registeredDomains = (Get-AzTenant).Domains
 
-        # This returns Selector1
-        Get-DnsRecords -DomainName ("selector1._domainkey.$($domainName)") -dnsRecordType "cname" -valueField "NameHost"
 
-        # This returns Selector1
-        Get-DnsRecords -DomainName ("selector2._domainkey.$($domainName)") -dnsRecordType "cname" -valueField "NameHost"
+        foreach ($domainName in $registeredDomains) {
+            # This returns the SPF Record
+            $param = @{
+                DomainName = $($domainName)
+                Filter     = "spf1"
+            }
+            $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null
+            $spfRecord = Get-DnsRecords @param
 
+            # This returns the Dmarc record
+            $param = @{
+                DomainName = ("_dmarc.$($domainName)")
+            }
+            $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null
+            $dmarcRecord = Get-DnsRecords @param
+
+            # This returns Selector1
+            $param = @{
+                DomainName    = ("selector1._domainkey.$($domainName)")
+                dnsRecordType = "cname"
+                valueField    = "NameHost"
+            }
+            $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null
+            $selector1Record = Get-DnsRecords @param
+
+            # This returns Selector1
+            $param = @{
+                DomainName    = ("selector2._domainkey.$($domainName)")
+                dnsRecordType = "cname"
+                valueField    = "NameHost"
+            }
+            $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null
+            $selector2Record = Get-DnsRecords @param
+
+            $domains += [PSCustomObject]@{
+                DomainName = $domainName
+                SPF        = $spfRecord.Record
+                DMARC      = $dmarcRecord.Record
+                Selector1  = $selector1Record.Record
+                Selector2  = $selector2Record.Record
+            }
+
+
+        }
     }
     END {
-
+        $AadDomains | Export-Csv $exportFileName -Force -Delimiter ";" -NoClobber -Encoding utf8
     }
 }
 
-get-azuredomainsDmarc -domainName "3fifty.eu"
-
-get-azuredomainsDmarc -domainName "westerdijkstraat.nl"
+get-azuredomainsDmarc -TenantId "86ce8023-5427-4dd1-89a9-42f91996385d" -customDNS 8.8.8.8
