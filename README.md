@@ -14,6 +14,11 @@ Summary of scripts
 Script to generate TOC that works on Github 
  
 
+### Get-AzureDomainsDMARC.ps1 
+ 
+collets tenant SPF,DMARC, DKIM records. 
+ 
+
 ### Get-FolderStructure.ps1 
  
 Script to create a Tree view of a folder 
