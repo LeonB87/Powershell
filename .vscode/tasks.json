@@ -19,11 +19,20 @@
                         "executable": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
                     }
                 },
-                "command": "\"${workspaceFolder}\\.local\\localrun.ps1\"",
+                "command": "\"${workspaceFolder}\\.local\\localrun.ps1\""
             },
             "group": {
                 "kind": "build",
                 "isDefault": true
+            }
+        },
+        {
+            "type": "func",
+            "command": "host start",
+            "problemMatcher": "$func-powershell-watch",
+            "isBackground": true,
+            "options": {
+                "cwd": "${workspaceFolder}/Powershell\\Azure Functions"
             }
         }
     ]

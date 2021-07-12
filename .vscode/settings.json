@@ -25,7 +25,6 @@
     //Editor
     "editor.foldingStrategy": "indentation",
     "editor.formatOnSave": true,
-    "editor.formatOnSaveTimeout": 30,
     //Telemetry
     "telemetry.enableTelemetry": false,
     //cSpell Dictionary
@@ -87,5 +86,9 @@
         "sgraph",
         "áàâãéèêíïóôõöúçñ"
     ],
-    "powershell.codeFormatting.addWhitespaceAroundPipe": true
+    "powershell.codeFormatting.addWhitespaceAroundPipe": true,
+    "azureFunctions.deploySubpath": "Powershell\\Azure Functions",
+    "azureFunctions.projectLanguage": "PowerShell",
+    "azureFunctions.projectRuntime": "~3",
+    "debug.internalConsoleOptions": "neverOpen"
 }
