@@ -8,11 +8,16 @@ function check-mycustommodule {
         Write-Host ($message)
     }
     PROCESS {
-
+        $message = ("The input we've received is: $($message)")
     }
     END {
-
+        return $message
     }
 }
 
-Export-ModuleMember -Function get-*
+function Get-ModuleReply {
+    Write-Host ("Module is called")
+    return ("Hi there")
+}
+
+Export-ModuleMember -Function "Get-ModuleReply","check-mycustommodule"

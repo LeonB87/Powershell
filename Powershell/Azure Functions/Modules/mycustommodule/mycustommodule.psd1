@@ -9,10 +9,10 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule           = '.\mycustommodule.psm1'
+    RootModule           = 'mycustommodule.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '1.0'
+    ModuleVersion        = '1.0.0'
 
     # Supported PSEditions
     CompatiblePSEditions = @("core", "Desktop")
@@ -24,7 +24,7 @@
     Author               = 'Léon Boers'
 
     # Company or vendor of this module
-    CompanyName          = 'Unknown'
+    CompanyName          = '3fifty'
 
     # Copyright statement for this module
     Copyright            = '(c) Léon Boers. All rights reserved.'
@@ -69,16 +69,16 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport    = @("check-mycustommodule")
+    FunctionsToExport    = @("check-mycustommodule","Get-ModuleReply")
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport      = '*'
+    CmdletsToExport      = @()
 
     # Variables to export from this module
     VariablesToExport    = '*'
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport      = '*'
+    AliasesToExport      = @()
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()

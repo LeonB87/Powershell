@@ -6,21 +6,14 @@ param($Request, $TriggerMetadata)
 # Write to the Azure Functions log stream.
 Write-Host "PowerShell HTTP trigger function processed a request."
 
-$modules = Get-Module -ListAvailable
-$modulesInfo = @()
+Get-Command -Module mycystommodule
 
-foreach ($module in $modules) {
-    $modulesInfo += [PSCustomObject]@{
-        Name        = $module.Name
-        Path        = $module.Path
-        Description = $module.Description
-    }
-}
-$version = ("$($PSVersionTable.Psversion) - $($PSversiontable.PSEdition)")
+$result1 = check-mycustommodule
+$result2 = Get-ModuleReply
 
 $responseBody = @{
-    modules   = $modulesInfo
-    PSversion = $version
+    result1 = $result1
+    result2 = $result2
 } | ConvertTo-Json -Depth 10
 
 # Associate values to output bindings by calling 'Push-OutputBinding'.
