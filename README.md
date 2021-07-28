@@ -10,7 +10,7 @@ Summary of scripts
 
 ---
 
-### [Generate-githubTOC.ps1](.\Powershell\\scripts\Generate-githubTOC\Generate-githubTOC.md)
+### [Generate-githubTOC.ps1](/Powershell/Scripts/Generate-GithubTOC/Generate-githubTOC.md)
  
 Script to generate TOC that works on Github 
  
