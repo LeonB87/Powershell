@@ -72,7 +72,7 @@ PROCESS {
         }
 
         # Get the scripts from the folder
-        $scripts = Get-Childitem $ScriptFolder -Filter "*.ps1" -Recurse
+        $scripts = Get-ChildItem $ScriptFolder -Filter "*.ps1" -Recurse
 
         if ($IncludeWikiSummary) {
             if ($WikiSummaryOutputfileName) {
@@ -162,11 +162,52 @@ PROCESS {
                             $items = $line.Trim().Split(':', $option)
                             ("**$($items[0]):** $($items[1])`n") | Out-File -FilePath $outputFile -Append
                         }
-                        "`n" | Out-File -FilePath $outputFile -Append
                     }
                     else {
                         Write-Warning -Message ("Notes not defined in file $($script.fullname)")
                     }
+
+
+                    if ($help.Component) {
+
+                        ("## Prerequisites`r") | Out-File -FilePath $outputFile -Append
+
+                        $tables = $help.Component.Split('--', $option)
+
+                        foreach ($table in $tables) {
+                            $text = $table.Split(';', $option)
+                            $count = 0
+                            $headerLine = ''
+                            $tableLine = ''
+                            $contentLine = ''
+                            foreach ($line in $text) {
+                                $contentLine = ''
+                                $items = $line.Trim().Split(':', $option)
+                                if ($count -eq 0) {
+                                    foreach ($item in $items) {
+                                        $headerLine += ("| $($item) ")
+                                        $tableLine += ('|-')
+                                    }
+                                    $headerLine += ('|')
+                                    $tableLine += ('|')
+                                    $headerLine | Out-File -FilePath $outputFile -Append
+                                    $tableLine | Out-File -FilePath $outputFile -Append
+                                }
+                                else {
+                                    foreach ($item in $items) {
+                                        $contentLine += ("| $($item) ")
+                                    }
+                                    $contentLine += ('|')
+                                    $contentLine | Out-File -FilePath $outputFile -Append
+                                }
+                                $count++
+                            }
+                        }
+                    }
+                    else {
+                        Write-Warning -Message ("Component not defined in file $($script.fullname)")
+                    }
+                    "`r" | Out-File -FilePath $outputFile -Append
 
                     #description
                     if ($help.Description) {
