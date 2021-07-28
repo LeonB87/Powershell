@@ -24,7 +24,7 @@ Script to generate TOC that works on Github
 
 **Purpose/Change:**  Initial script development
 
-**Version:** 1.1.0
+**Version 1.1.0:**   Refactored the entire script to read an entire Markdown and take into account different levels of headers
 
 
 

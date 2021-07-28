@@ -1,5 +1,6 @@
 - [Synopsis](#synopsis)
 - [Information](#information)
+- [Prerequisites](#prerequisites)
 - [Description](#description)
 - [Examples](#examples)
      * [Example 1](#example-1)
@@ -9,7 +10,7 @@
 
 ## Synopsis
 
-collets tenant SPF,DMARC, DKIM records.
+collects tenant SPF,DMARC, DKIM records for all domains in an Azure Tenant.
 
 ```PowerShell
  .\Get-AzureDomainsDMARC.ps1 [[-customDNS] <String>] [-TenantId] <String> [<CommonParameters>]
@@ -25,15 +26,23 @@ collets tenant SPF,DMARC, DKIM records.
 
 **Purpose/Change:**  Initial script development
 
-**require -Modules @{ ModuleName="Az.Accounts":** 
+**Credits:**         Initial script snippet for retrieving DNS record was originally from 'ntsystems.it' and altered by me
 
-**ModuleVersion="1.9.2" }:** 
+**Version 1.0.0:**   Initial setup of the script
 
+## Prerequisites
+
+| Module | Tested Version |
+|-|-|
+| Az.Accounts | 1.9.2 |
 
 
 ## Description
 
-Connect to an Azure Tenant and collects all registered Domain names. for eah domain name, the current SPF, DMARC en DKIM Selector1 an 2 are retrieved.
+Connect to an Azure Tenant and collects all registered Domain names.
+for each domain name, the current SPF, DMARC and DKIM Selector1 an 2 are retrieved.
+
+The collected information is export as a CSV file in the folder you run the script.
 
 
 ## Examples

@@ -1,11 +1,12 @@
-
 <#
     .SYNOPSIS
-    collets tenant SPF,DMARC, DKIM records.
+    collects tenant SPF,DMARC, DKIM records for all domains in an Azure Tenant.
 
     .DESCRIPTION
-    Connect to an Azure Tenant and collects all registered Domain names. for eah domain name, the current SPF, DMARC en DKIM Selector1 an 2 are retrieved.
+    Connect to an Azure Tenant and collects all registered Domain names.
+    for each domain name, the current SPF, DMARC and DKIM Selector1 an 2 are retrieved.
 
+    The collected information is export as a CSV file in the folder you run the script.
     .PARAMETER customDNS
     (optional) Specify the ipv4 address of a custom DNS server.
 
@@ -20,9 +21,16 @@
     Author:         Léon Boers;
     Creation Date:  10-05-2020;
     Purpose/Change: Initial script development;
+    Credits:        Initial script snippet for retrieving DNS record was originally from 'ntsystems.it' and altered by me;
+    Version 1.0.0:  Initial setup of the script;
+
+    .COMPONENT
+    Module:Tested Version;
+    Az.Accounts:1.9.2;
+
 
     #>
-#require -Modules @{ ModuleName="Az.Accounts"; ModuleVersion="1.9.2" }
+
 [CmdletBinding()]
 param (
     [Parameter(Mandatory = $false)]
@@ -42,8 +50,10 @@ BEGIN {
             This function uses Resolve-DNSName to get the SPF Record for a given domain. Objects with a DomainName property,
             .EXAMPLE
             This example gets DNS records
+
+            Inital script for DNS records is from https://ntsystems.it/PowerShell/TAK/Get-SPFRecord/
             #>
-        [CmdletBinding(HelpUri = 'https://ntsystems.it/PowerShell/TAK/Get-SPFRecord/')]
+        [CmdletBinding()]
         param (
             # Specify the Domain name for the query.
             [Parameter(Mandatory = $true)]
@@ -87,13 +97,12 @@ BEGIN {
         }
     } # END function Get-DnsRecords
 
-
-    if (((Get-AzTenant).Id -ne $TenantId)) {
+    if (((Get-AzTenant -ErrorAction SilentlyContinue).Id -ne $TenantId)) {
         Disconnect-AzAccount
         Connect-AzAccount -Tenant $TenantId -UseDeviceAuthentication
     }
 
-    $exportFileName = (".\AAD-Domains-$((Get-Date -Format "dd-MM-yyyy")).csv")
+    $exportFileName = (".\AAD-Domains-$((Get-Date -Format "dd-MM-yyyy-HH-mm")).csv")
 }
 Process {
 
@@ -107,14 +116,14 @@ Process {
             DomainName = $($domainName)
             Filter     = "spf1"
         }
-        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null
+        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
         $spfRecord = Get-DnsRecords @param
 
         # This returns the Dmarc record
         $param = @{
             DomainName = ("_dmarc.$($domainName)")
         }
-        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null
+        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
         $dmarcRecord = Get-DnsRecords @param
 
         # This returns Selector1
@@ -123,7 +132,7 @@ Process {
             dnsRecordType = "cname"
             valueField    = "NameHost"
         }
-        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null
+        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
         $selector1Record = Get-DnsRecords @param
 
         # This returns Selector1
@@ -132,7 +141,7 @@ Process {
             dnsRecordType = "cname"
             valueField    = "NameHost"
         }
-        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null
+        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
         $selector2Record = Get-DnsRecords @param
 
         $domains += [PSCustomObject]@{

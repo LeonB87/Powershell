@@ -16,7 +16,7 @@ Script to generate TOC that works on Github
 
 ### Get-AzureDomainsDMARC.ps1 
  
-collets tenant SPF,DMARC, DKIM records. 
+collects tenant SPF,DMARC, DKIM records for all domains in an Azure Tenant. 
  
 
 ### Get-FolderStructure.ps1 

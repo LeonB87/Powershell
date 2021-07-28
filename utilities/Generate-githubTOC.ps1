@@ -18,7 +18,7 @@
     Creation Date:  20-03-2021;
     Purpose/Change: Initial script development;
 
-    Version:1.1.0:Refactored the entire script to read an entire Markdown and take into account different levels of headers;
+    Version 1.1.0:  Refactored the entire script to read an entire Markdown and take into account different levels of headers;
     #>
 [CmdletBinding()]
 param (
@@ -59,7 +59,7 @@ BEGIN {
                 return("                 * [$($str)](#$($str.replace(' ','-').ToLower()))")
             }
             Default {
-                Write-verbose ("unknown switch condition detected")
+                Write-Verbose ("unknown switch condition detected")
             }
         }
     }
