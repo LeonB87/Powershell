@@ -128,13 +128,13 @@ PROCESS {
 
                 if ($IncludeWikiSummary) {
                     if ($SummaryTitleAsLink) {
-                        ("### [$($script.Name)]($($SummaryLinkPatern)$($script.BaseName)/$($script.BaseName).md)`r") | Out-File -FilePath $WikiSummaryFilename -Append
+                        ("### [$($script.Name)]($($SummaryLinkPattern)$($script.BaseName)/$($script.BaseName).md)`r") | Out-File -FilePath $WikiSummaryFilename -Append
                     }
                     else {
                         ("### $($script.Name) `r") | Out-File -FilePath $WikiSummaryFilename -Append
                     }
                 }
-
+                $script | Format-List *
                 if ($help) {
                     $outputFile = ("$($newfolder)\$($script.BaseName)$($scriptNameSuffix)")
                     Out-File -FilePath $outputFile
