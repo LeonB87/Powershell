@@ -7,7 +7,6 @@
 - [Parameters](#parameters)
      * [customDNS](#customdns)
      * [TenantId](#tenantid)
-
 ## Synopsis
 
 collects tenant SPF,DMARC, DKIM records for all domains in an Azure Tenant.
