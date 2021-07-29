@@ -22,7 +22,7 @@ Include the TOC from the Azure DevOps wiki to the markdown files
 
 .PARAMETER SummaryLinkPattern
 The pattern for the url/ Defaults to '/Powershell/Scripts/'
-this will create a link pointing to '/Powershell/Scripts/%script Basename%/%Script Name%.ps1
+this will create a link pointing to '/Powershell/Scripts/%script Basename%/%Script Name%.md
 
 .PARAMETER SummaryTitleAsLink
 Boolean wheter to add links in the Summary page to the specific powershell MD file
@@ -128,7 +128,7 @@ PROCESS {
 
                 if ($IncludeWikiSummary) {
                     if ($SummaryTitleAsLink) {
-                        ("### [$($script.Name)]($($SummaryLinkPatern)$($script.BaseName)/$($script.Name))`r") | Out-File -FilePath $WikiSummaryFilename -Append
+                        ("### [$($script.Name)]($($SummaryLinkPatern)$($script.BaseName)/$($script.BaseName).md)`r") | Out-File -FilePath $WikiSummaryFilename -Append
                     }
                     else {
                         ("### $($script.Name) `r") | Out-File -FilePath $WikiSummaryFilename -Append
