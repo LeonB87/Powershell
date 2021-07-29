@@ -5,13 +5,12 @@
      * [Example 1](#example-1)
 - [Parameters](#parameters)
      * [Path](#path)
-
 ## Synopsis
 
 Script to generate TOC that works on Github
 
 ```PowerShell
- .\Generate-githubTOC.ps1 [-Path] <String> [<CommonParameters>]
+ .\Generate-GithubTOC.ps1 [-Path] <String> [<CommonParameters>]
 ```
 
 ## Information

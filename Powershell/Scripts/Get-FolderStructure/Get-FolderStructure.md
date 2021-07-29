@@ -7,7 +7,6 @@
 - [Parameters](#parameters)
      * [Path](#path)
      * [outputType](#outputtype)
-
 ## Synopsis
 
 Script to create a Tree view of a folder

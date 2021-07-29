@@ -5,7 +5,6 @@
      * [Example 1](#example-1)
 - [Parameters](#parameters)
      * [stringParameter](#stringparameter)
-
 ## Synopsis
 
 This is a powershell script template
