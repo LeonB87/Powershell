@@ -5,13 +5,12 @@
      * [Example 1](#example-1)
 - [Parameters](#parameters)
      * [Path](#path)
-
 ## Synopsis
 
 Script to generate TOC that works on Github
 
 ```PowerShell
- .\Generate-githubTOC.ps1 [-Path] <String> [<CommonParameters>]
+ .\Generate-GithubTOC.ps1 [-Path] <String> [<CommonParameters>]
 ```
 
 ## Information
@@ -24,7 +23,7 @@ Script to generate TOC that works on Github
 
 **Purpose/Change:**  Initial script development
 
-**Version:** 1.1.0
+**Version 1.1.0:**   Refactored the entire script to read an entire Markdown and take into account different levels of headers
 
 
 
