@@ -19,6 +19,7 @@ Creation Date:  21-08-2021;
 
 .COMPONENT
 Module:Tested Version;
+Az.Accounts:2.5.2;
 #>
 using namespace System.Net
 
@@ -53,7 +54,6 @@ BEGIN {
     } #end if ![string]::IsNullOrEmpty($Request.Body)
 
     if ($continueScript) {
-
         [string]$inputString = $Request.Body.string
         [string]$stringFixedInput = $Request.Body.stringFixedInput
         [array]$inputListArray = $Request.Body.listArray
@@ -61,26 +61,34 @@ BEGIN {
         [array]$azureVMList = $Request.Body.azureVMList
 
         Write-Information ('Received the following information from the body')
-        Write-Information ("string:             $($inputString)")
-        Write-Information ("stringFixedInput:             $($stringFixedInput)")
-        Write-Information ("inputListArray Count:     $($inputListArray.count)")
-        Write-Information ("inputListArray data:     $($inputListArray)")
-        Write-Information ("emailAddress:     $($emailAddress)")
-        Write-Information ("azureVMList count:     $($azureVMList.count)")
+        Write-Information ("string:                 $($inputString)")
+        Write-Information ("stringFixedInput:       $($stringFixedInput)")
+        Write-Information ("inputListArray Count:   $($inputListArray.count)")
+        Write-Information ("inputListArray data:    $($inputListArray)")
+        Write-Information ("emailAddress:           $($emailAddress)")
+        Write-Information ("azureVMList count:      $($azureVMList.count)")
 
         if ($azureVMList.count -ge 1) {
             foreach ($vm in $azureVMList) {
-                Write-Information ("vmName:     $($vm.vmName)")
+                Write-Information ("vmName:             $($vm.vmName)")
             }
         }
-
     }
-
-
 }
 PROCESS {
     if ($continueScript) {
+        Write-Information ("The main part of the script. we're using the input to do something really cool and usefull here.")
 
+
+        $output = @{
+            string              = ("You've send me the string '$($inputString)'")
+            inputListArrayCount = ("You've send a total of $($inputListArray.count) input(s) for the array")
+            inputListArray      = $inputListArray
+            email               = ("the email you supplied is '$($emailAddress)'")
+            azureVms            = ("You've supplied $($azureVMList.Count) vm(s)")
+            azureVmList         = $azureVMList
+
+        }
     }
 }
 END {
@@ -101,6 +109,7 @@ END {
     $returnBody = @{
         success = $success
         errors  = $collectedErrors
+        output  = $output
     } | ConvertTo-Json -Depth 10
 
     Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
