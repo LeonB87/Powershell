@@ -1,16 +1,23 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
+  "description": "This is a description",
   "properties": {
     "string": {
       "type": "string"
     },
     "stringFixedInput": {
       "type": "string",
-      "enum": ["Option A", "Option B", "Option C"]
+      "description": "This is a description",
+      "enum": [
+        "Option A",
+        "Option B",
+        "Option C"
+      ]
     },
     "listArray": {
       "type": "array",
+      "description": "This is a description",
       "items": [
         {
           "type": "string"
@@ -28,19 +35,46 @@
           "type": "object",
           "properties": {
             "vmName": {
-              "type": "string"
+              "type": "string",
+              "description": "This is a description"
             },
             "resourcegroupName": {
-              "type": "string"
+              "type": "string",
+              "description": "This is a description"
             },
             "location": {
-              "type": "string"
+              "type": "string",
+              "description": "This is a description"
             },
             "vmSize": {
-              "type": "string"
+              "type": "string",
+              "description": "This is a description"
             },
             "ResourceId": {
-              "type": "string"
+              "type": "string",
+              "description": "This is a description"
+            },
+            "subvmlist": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "vmName": {
+                      "type": "string",
+                      "description": "This is a sub description"
+                    },
+                    "resourcegroupName": {
+                      "type": "string",
+                      "description": "This is a sub description"
+                    },
+                    "location": {
+                      "type": "string",
+                      "description": "This is a sub description"
+                    }
+                  }
+                }
+              ]
             }
           },
           "required": [
@@ -54,5 +88,10 @@
       ]
     }
   },
-  "required": ["string", "listArray", "stringFixedInput", "emailAddress"]
+  "required": [
+    "string",
+    "listArray",
+    "stringFixedInput",
+    "emailAddress"
+  ]
 }

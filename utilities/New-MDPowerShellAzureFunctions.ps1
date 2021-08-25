@@ -30,7 +30,7 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
 
 .NOTES
     Version:        1.0.2;
-    Author:         3fifty | Maik van der Gaag | Leon Boers;
+    Author:         3fifty | Maik van der Gaag | Léon Boers;
     Creation Date:  20-04-2020;
     Purpose/Change: Initial script development;
     1.0.0:          Initial Release;
@@ -75,6 +75,84 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
 
         $exclude = $ExcludeFolders.Split(',', $option)
 
+        function process-subproperties {
+            param(
+                [Parameter(Mandatory = $true)]
+                [object]$object
+            )
+            BEGIN {
+                Write-Verbose ("Proccesing '$($object.Name)' properties")
+
+                $subArray = @{}
+            }
+            PROCESS {
+                ("`r`n##### $($object.name) properties") | Out-File -FilePath $outputFile -Append
+                ("`r`n| Property | Type | Accepted values | Description |") | Out-File -FilePath $outputFile -Append
+                ('|-|-|-|-|') | Out-File -FilePath $outputFile -Append
+
+                if ($object.value.items.type -eq 'string') {
+
+                    $propertyNameFormatted = $object.value.items.type
+                    $acceptedValues = $null
+                    $description = $object.value.description
+                    $propertyType = $object.value.type
+
+                    if ($null -ne $object.value.items.pattern) {
+                        $acceptedValues += ("**Pattern**: $($object.value.items.pattern.replace('|','\|'))")
+                    }
+
+                    ("| $($propertyNameFormatted) | $propertyType  | $($acceptedValues) | $($description ) |") | Out-File -FilePath $outputFile -Append
+                }
+                elseif ($object.value.items.type -eq 'object') {
+                    foreach ($property in ($object.value.items.properties | Get-Member -type NoteProperty)) {
+                        $propertyName = $property.Name
+                        $acceptedValues = $null
+                        $description = $null
+                        $propertyType = ($object.value.items.properties.$propertyName).type
+
+
+                        if ($object.Value.items.required -contains $property.Name) {
+                            $propertyNameFormatted = ("**$($propertyName)**")
+                        }
+                        else {
+                            $propertyNameFormatted = $propertyName
+                        }
+
+                        if ($null -ne $object.value.items.properties.$propertyName.enum) {
+                            $acceptedValues += ('<ul>')
+                            foreach ($item in $object.value.items.properties.$propertyName.enum) {
+                                $acceptedValues += ("<li>$($item)</li>")
+                            }
+                            $acceptedValues += ('</ul>')
+                        }
+
+                        if ($null -ne $object.value.items.properties.$propertyName.pattern) {
+                            $acceptedValues += ("**Pattern**: $($object.value.items.properties.$propertyName.pattern.replace('|','\|'))")
+                        }
+
+                        if ($null -ne $object.value.items.properties.$propertyName.description) {
+                            $description = $($object.value.items.properties.$propertyName.description)
+                        }
+
+                        if ($propertyType -eq 'array') {
+                            $subArray += @{
+                                $propertyName = $object.value.items.properties.$propertyName
+
+                            }
+                            $description += ('<br><br> **See table below for array properties**')
+                        }
+                        ("| $($propertyNameFormatted) | $propertyType  | $($acceptedValues) | $($description ) |") | Out-File -FilePath $outputFile -Append
+                    }
+                }
+            }
+            END {
+                foreach ($item in ($subArray.GetEnumerator())) {
+                    process-subproperties -object $item
+                }
+
+            }
+        }
+
     }
     PROCESS {
         try {
@@ -86,7 +164,7 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
             }
 
             # Get the scripts from the folder
-            $scripts = Get-ChildItem $ScriptFolder -Filter '*.ps1' -Recurse
+            $scripts = Get-ChildItem $ScriptFolder -Filter 'run.ps1' -Recurse
 
             if ($IncludeWikiSummary) {
                 if ($WikiSummaryOutputfileName) {
@@ -111,7 +189,6 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
                 if (!$exclude.Contains($script.Directory.Name)) {
                     Write-Information ("Documenting file: $($script.FullName)")
 
-
                     if ($KeepStructure) {
                         if ($script.DirectoryName -ne $ScriptFolder) {
                             $newfolder = $OutputFolder + '' + $script.Directory.Name
@@ -123,6 +200,11 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
                     }
                     else {
                         $newfolder = $OutputFolder
+                    }
+
+                    if (Test-Path -Path "$($script.DirectoryName)\function.json") {
+                        $function = Get-Content -Path "$($script.DirectoryName)\function.json" | ConvertFrom-Json -Depth 100
+                        $functionIn = $function.bindings | Where-Object direction -EQ 'in'
                     }
 
                     $help = Get-Help $script.FullName -ErrorAction 'SilentlyContinue' -Detailed
@@ -163,10 +245,9 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
 
                         #syntax
                         if ($help.Syntax) {
-                            $capturedGetHelpOutput = $help.Syntax | Out-String
-                            $parameters = $capturedGetHelpOutput.split($script.name).Trim()[1]
-                            $syntaxString = (".\$($script.name) $($parameters)")
-                            ("`r``````PowerShell`r $($syntaxString)`r``````") | Out-File -FilePath $outputFile -Append
+
+                            $syntaxString = ("$($functionIn.Methods.ToUpper())  \api\$($script.Directory.name)")
+                            ("`r``````REST`r $($syntaxString)`r``````") | Out-File -FilePath $outputFile -Append
                         }
                         else {
                             Write-Warning -Message ("Syntax not defined in file $($script.fullname)")
@@ -184,7 +265,6 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
                         else {
                             Write-Warning -Message ("Notes not defined in file $($script.fullname)")
                         }
-
 
                         if ($help.Component) {
 
@@ -237,6 +317,68 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
                             Write-Warning -Message "Description not defined in file $($script.fullname)"
                         }
 
+
+                        # New Azure Function data here
+
+                        if (Test-Path -Path "$($script.DirectoryName)\schema.json") {
+                            $subProperties = @{}
+                            ("`r`n### JSON input Schema`r`n") | Out-File -FilePath $outputFile -Append
+                            ("**Bold** properties are required`r`n") | Out-File -FilePath $outputFile -Append
+
+                            $schema = Get-Content -Path "$($script.DirectoryName)\schema.json" | ConvertFrom-Json -Depth 100
+
+                            ("`r`n#### Main input Schema`r`n") | Out-File -FilePath $outputFile -Append
+                            ("`r`n| Property | Type | Accepted values | Description |") | Out-File -FilePath $outputFile -Append
+                            ('|-|-|-|-|') | Out-File -FilePath $outputFile -Append
+
+                            foreach ($property in ($schema.properties | Get-Member -type NoteProperty)) {
+                                $propertyName = $property.Name
+                                $acceptedValues = $null
+                                $description = $null
+                                $propertyType = ($schema.properties.$propertyName).type
+
+                                if ($schema.required -contains $property.Name) {
+                                    $propertyNameFormatted = ("**$($propertyName)**")
+                                }
+                                else {
+                                    $propertyNameFormatted = $propertyName
+                                }
+                                if ($null -ne $schema.properties.$propertyName.enum) {
+                                    $acceptedValues += ('<ul>')
+                                    foreach ($item in $schema.properties.$propertyName.enum) {
+                                        $acceptedValues += ("<li>$($item)</li>")
+                                    }
+                                    $acceptedValues += ('</ul>')
+                                }
+
+                                if ($null -ne $schema.properties.$propertyName.pattern) {
+                                    $acceptedValues += ("**Pattern**: $($schema.properties.$propertyName.pattern.replace('|','\|'))")
+                                }
+
+                                if ($null -ne $schema.properties.$propertyName.description) {
+                                    $description = $($schema.properties.$propertyName.description)
+                                }
+                                if ($propertyType -eq 'array') {
+                                    $subProperties += @{
+                                        $propertyName = $schema.properties.$propertyName
+
+                                    }
+                                    $description += ('<br><br> **See table below for array properties**')
+                                }
+
+
+
+                                ("| $($propertyNameFormatted) | $propertyType  | $($acceptedValues) | $($description ) |") | Out-File -FilePath $outputFile -Append
+                            }
+
+                            Write-Verbose ("Found '$($subProperties.count)' subproperties to process")
+
+                            foreach ($item in ($subProperties.GetEnumerator())) {
+                                process-subproperties -object $item
+                            }
+                        }
+
+
                         #examples
                         if ($help.Examples) {
                             ("## Examples`r") | Out-File -FilePath $outputFile -Append
@@ -254,7 +396,7 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
                         }
 
                         if ($help.Parameters) {
-                            ("## Parameters`r") | Out-File -FilePath $outputFile -Append
+                            ("`r`n## Parameters`r") | Out-File -FilePath $outputFile -Append
                             forEach ($item in $help.Parameters.Parameter) {
                                 ("### $($item.name)`r") | Out-File -FilePath $outputFile -Append
                                 $item.description[0].text | Out-File -FilePath $outputFile -Append
@@ -295,4 +437,4 @@ Boolean wheter to add links in the Summary page to the specific powershell MD fi
     }
     END {}
 }
-New-MDPowerShellAzureFunctions -ScriptFolder "..\Powershell\Azure Functions\test-function" -OutputFolder "..\.local\.markdown\posh-functions" -IndexFileName "PowerShell Functions"
+New-MDPowerShellAzureFunctions -ScriptFolder '..\Powershell\Azure Functions\test-function' -OutputFolder '.\Powershell\Azure Functions\' -KeepStructure $true -IncludeWikiTOC $true -WikiTOCStyle 'Github' -verbose
