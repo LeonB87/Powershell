@@ -51,7 +51,10 @@ BEGIN {
             $message = ("The schema.json file cannot be found.")
             Write-Error -Message $message ; $collectedErrors += $message
         }
-    } #end if ![string]::IsNullOrEmpty($Request.Body)
+    }
+    else {
+        Write-Information ("No body was supplied").
+    }#end if ![string]::IsNullOrEmpty($Request.Body)
 
     if ($continueScript) {
         [string]$inputString = $Request.Body.string
