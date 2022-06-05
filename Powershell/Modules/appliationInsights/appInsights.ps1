@@ -11,12 +11,11 @@ function New-ApplicationInsightsClient {
     $Client.InstrumentationKey = $InstrumentationKey
 
     $defaultUserInformation = @{
-        AuthenticatedUserId = [Security.Principal.WindowsIdentity]::GetCurrent().Name
+        AuthenticatedUserId = whoami
         UserAgent           = ("PS $($psversiontable.PSEdition) $($psversiontable.PSVersion)")
     }
 
     $defaultDeviceInformation = @{
-        ID              = (Get-CimInstance -Class Win32_ComputerSystemProduct).UUID
         OperatingSystem = $psversiontable.OS
 
     }
