@@ -2,7 +2,7 @@
 
 
 
-function New-ApplicationInsightClient {
+function New-ApplicationInsightsClient {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true, HelpMessage = "The Application Insights Instrumentation Key that is used to send the messages to the correct Application Insights Instance.")]
@@ -17,7 +17,7 @@ function New-ApplicationInsightClient {
     return $AIClient
 }
 
-function Set-ApplicationInsightClientInformation {
+function Set-ApplicationInsightsClientInformation {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -54,7 +54,7 @@ function Set-ApplicationInsightClientInformation {
 
 }
 
-function Write-ApplicationInsightTrace {
+function Write-ApplicationInsightsTrace {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -95,7 +95,7 @@ function Write-ApplicationInsightTrace {
     }
 }
 
-function Write-ApplicationInsightMetric {
+function Write-ApplicationInsightsMetric {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -134,19 +134,76 @@ function Write-ApplicationInsightMetric {
     }
 }
 
+function Write-ApplicationInsightsException {
+    [CmdletBinding(DefaultParameterSetName = "Exception")]
+    param (
+        [Parameter(Mandatory = $true)]
+        [Microsoft.ApplicationInsights.TelemetryClient]
+        $Client,
 
-$client = New-ApplicationInsightClient -InstrumentationKey 1234
-Write-ApplicationInsightTrace -Client $client -Message "This is a test message" -SeverityLevel "Information"
+        [Parameter(Mandatory = $true, ParameterSetName = "Exception")]
+        [System.Exception]
+        $Exception,
+
+        [Parameter(Mandatory = $true, ParameterSetName = "StringException")]
+        [string]
+        $ExceptionString,
+
+        [Parameter(Mandatory = $false)]
+        [System.Collections.Generic.Dictionary[string, double]]
+        $Metrics = [System.Collections.Generic.Dictionary[string, double]]::new(),
+
+        [Parameter(Mandatory = $false, HelpMessage = "This is a dictionary<string, string> with additional information that will be added as 'customDimensions' in Application Insights")]
+        [System.Collections.Generic.Dictionary[string, string]]
+        $properties = [System.Collections.Generic.Dictionary[string, string]]::new()
+    )
+    BEGIN {
+        Write-Verbose ("Running in Parameterset '$($PSCmdlet.ParameterSetName)'")
+
+        if ($PSCmdlet.ParameterSetName -eq "StringException") {
+            $Exception = [System.Exception]::new($ExceptionString)
+        }
+    }
+    PROCESS {
+        $client.TrackException($Exception, $properties, $Metrics)
+
+        $client.TrackExce
+    }
+    END {
+        $Client.Flush()
+    }
+}
+
+
+$client = New-ApplicationInsightsClient -InstrumentationKey c323cf10-da34-4a73-9eac-47dad64d840b
+Write-ApplicationInsightsTrace -Client $client -Message "This is a test message" -SeverityLevel "Information"
 
 $dictionary = [System.Collections.Generic.Dictionary[string, string]]::new()
 
 $dictionary.Add("FirstName", "John")
 $dictionary.Add("LastName", "Doe")
 
-Write-ApplicationInsightTrace -Client $client -Message "This is a test message with properties" -SeverityLevel "Information" -properties $dictionary
+Write-ApplicationInsightsTrace -Client $client -Message "This is a test message with properties" -SeverityLevel "Information" -properties $dictionary
 
-Write-ApplicationInsightMetric -Client $client -Name 'My Metric Name' -Metric 100
-Write-ApplicationInsightMetric -Client $client -Name 'My Metric Name' -Metric 100 -properties $dictionary
+Write-ApplicationInsightsMetric -Client $client -Name 'My Metric Name' -Metric 100
+Write-ApplicationInsightsMetric -Client $client -Name 'My Metric Name' -Metric 100 -properties $dictionary
+
+Write-ApplicationInsightsException -ExceptionString "This happend!" -Client $client -properties $dictionary
+
+$metrics = [System.Collections.Generic.Dictionary[string, double]]::new()
+
+$metrics.Add("MyMetric", 100)
+$metrics.Add("MyMetric 2", 150)
+
+try {
+    0 / 0
+}
+catch {
+    $caughtException = $_.Exception
+}
+
+Write-ApplicationInsightsException -Exception $caughtException -Client $client -Metrics $metrics -properties $dictionary
+
 
 # # PageView
 # $client.TrackPageView($MyInvocation.MyCommand.Name)
