@@ -13,8 +13,12 @@
     "powershell.codeFormatting.whitespaceAroundPipe": true,
     "powershell.codeFormatting.ignoreOneLineBlock": true,
     "powershell.codeFormatting.alignPropertyValuePairs": true,
+    "powershell.codeFormatting.autoCorrectAliases": true,
+    "powershell.codeFormatting.useCorrectCasing": true,
+    "powershell.codeFormatting.whitespaceBetweenParameters": true,
     //Git
     "git.autofetch": true,
+    "git.pruneOnFetch": true,
     //Files
     "files.defaultLanguage": "powershell",
     "files.encoding": "utf8",

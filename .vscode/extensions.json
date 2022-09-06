@@ -7,6 +7,7 @@
         "mhutchie.git-graph",
         "wengerk.highlight-bad-chars",
         "bencoleman.armview",
-        "jkiviluoto.tws"
+        "jkiviluoto.tws",
+        "mechatroner.rainbow-csv"
     ]
 }
