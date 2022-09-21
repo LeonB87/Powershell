@@ -13,16 +13,23 @@
     .PARAMETER TenantId
     The tenand ID you and to connect to and retrieve the domains.
 
+    .PARAMETER customSelectors
+    A string array of additional selectors you wish to check
+
     .EXAMPLE
     .\get-azuredomainsDmarc -TenantId "86ce8023-5427-4dd1-89a9-42f91996385d" -customDNS 8.8.8.8
 
+    .EXAMPLE
+    .\get-azuredomainsDmarc -TenantId "86ce8023-5427-4dd1-89a9-42f91996385d" -customDNS 8.8.8.8 -customSelectors "mimecast"
+
     .NOTES
-    Version:        1.0.0;
+    Version:        1.0.1;
     Author:         Léon Boers;
     Creation Date:  10-05-2020;
     Purpose/Change: Initial script development;
     Credits:        Initial script snippet for retrieving DNS record was originally from 'ntsystems.it' and altered by me;
     Version 1.0.0:  Initial setup of the script;
+    Version 1.0.1:  Added support for custom selectors;
 
     .COMPONENT
     Module:Tested Version;
@@ -38,7 +45,11 @@ param (
     [string]$customDNS,
 
     [Parameter(Mandatory = $true)]
-    [string]$TenantId
+    [string]$TenantId,
+
+    [Parameter(Mandatory = $false)]
+    [string[]]
+    $customSelectors
 
 )
 BEGIN {
@@ -106,9 +117,12 @@ BEGIN {
 }
 Process {
 
-    $domains = @()
+    $result = @()
     $registeredDomains = (Get-AzTenant).Domains
 
+    if ($customSelectors.Count -ge 1) {
+        Write-Output ("received custom selectors")
+    }
 
     foreach ($domainName in $registeredDomains) {
         # This returns the SPF Record
@@ -123,7 +137,7 @@ Process {
         $param = @{
             DomainName = ("_dmarc.$($domainName)")
         }
-        $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
+
         $dmarcRecord = Get-DnsRecords @param
 
         # This returns Selector1
@@ -133,6 +147,7 @@ Process {
             valueField    = "NameHost"
         }
         $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
+
         $selector1Record = Get-DnsRecords @param
 
         # This returns Selector1
@@ -142,17 +157,27 @@ Process {
             valueField    = "NameHost"
         }
         $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
+
         $selector2Record = Get-DnsRecords @param
 
-        $domains += [PSCustomObject]@{
+        $result += [PSCustomObject]@{
             DomainName = $domainName
             SPF        = $spfRecord.Record
             DMARC      = $dmarcRecord.Record
             Selector1  = $selector1Record.Record
             Selector2  = $selector2Record.Record
         }
+
+        foreach ($customSelector in $customSelectors) {
+            $param = @{
+                DomainName = ("$($customSelector)._domainkey.$($domainName)")
+            }
+            $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
+            $record = Get-DnsRecords @param
+                ($result.Where({$_.DomainName -eq $domainName})) | Add-Member -NotePropertyName $customSelector -NotePropertyValue $record
+        }
     }
 }
 END {
-    $domains | Export-Csv $exportFileName -Force -Delimiter ";" -NoClobber -Encoding utf8
+    $result | Export-Csv $exportFileName -Force -Delimiter ";" -NoClobber -Encoding utf8
 }
