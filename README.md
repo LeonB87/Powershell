@@ -19,6 +19,10 @@ collects tenant SPF,DMARC, DKIM records for all domains in an Azure Tenant.
 
 Script to create a Tree view of a folder
 
+### [Invoke-PSScriptAnalyzerCI.ps1](/Powershell/Scripts/Invoke-PSScriptAnalyzerCI/Invoke-PSScriptAnalyzerCI.md)
+
+This scripts helps validating your powershell scripts in a CI pipeline
+
 ### [template.ps1](/Powershell/Scripts/template/template.md)
 
 This is a powershell script template
