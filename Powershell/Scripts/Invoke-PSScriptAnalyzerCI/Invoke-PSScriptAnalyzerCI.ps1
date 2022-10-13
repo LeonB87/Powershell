@@ -1,5 +1,3 @@
-
-
 <#
     .SYNOPSIS
     This scripts helps validating your powershell scripts in a CI pipeline
@@ -27,10 +25,18 @@ param (
     [string]$path
 )
 BEGIN {
+    Import-Module psScriptAnalyzer | Out-Null
+    $module = Get-Module psScriptAnalyzer
+
     Write-Output ("Starting to analyze scripts in folder:   '$($path)'")
-    Write-Output ("PSScriptAnalyzer Version:                '$($(Get-Module psScriptAnalyzer).Version.ToString())'")
+
+    if (-not $null -eq $module) {
+        Write-Output ("PSScriptAnalyzer Version:                '$($module.Version.ToString())'")
+    }
 
     $scripts = Get-ChildItem -Path $path -Recurse -Filter "*.ps1*"
+
+    Write-Output ("Found '$($scripts.count)' scripts in folder '$($path)'")
 
     $analysisResult = @{
         errors      = 0
