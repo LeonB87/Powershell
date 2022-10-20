@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     collects tenant SPF,DMARC, DKIM records for all domains in an Azure Tenant.
 
@@ -53,7 +53,7 @@ param (
 
 )
 BEGIN {
-    function Get-DnsRecords {
+    function Get-DnsRecord {
         <#
             .Synopsis
             Get DNS Record for a domain.
@@ -98,6 +98,9 @@ BEGIN {
                     $dns = $dns | Where-Object Strings -Match $Filter
                 }
 
+                if ([string]::IsNullOrEmpty()) {
+                    Write-Warning ("$($valueField) is empty. this could cause issues finding the correct DNS entry.")
+                }
                 $returnObject = $dns | Select-Object @{Name = "DomainName"; Expression = { $_.Name } }, @{Name = "Record"; Expression = { $_.$valueField } }
             }
             catch {
@@ -106,7 +109,7 @@ BEGIN {
 
             return $returnObject
         }
-    } # END function Get-DnsRecords
+    } # END function Get-DnsRecord
 
     if (((Get-AzTenant -ErrorAction SilentlyContinue).Id -ne $TenantId)) {
         Disconnect-AzAccount
@@ -131,14 +134,14 @@ Process {
             Filter     = "spf1"
         }
         $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
-        $spfRecord = Get-DnsRecords @param
+        $spfRecord = Get-DnsRecord @param
 
         # This returns the Dmarc record
         $param = @{
             DomainName = ("_dmarc.$($domainName)")
         }
 
-        $dmarcRecord = Get-DnsRecords @param
+        $dmarcRecord = Get-DnsRecord @param
 
         # This returns Selector1
         $param = @{
@@ -148,7 +151,7 @@ Process {
         }
         $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
 
-        $selector1Record = Get-DnsRecords @param
+        $selector1Record = Get-DnsRecord @param
 
         # This returns Selector1
         $param = @{
@@ -158,7 +161,7 @@ Process {
         }
         $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
 
-        $selector2Record = Get-DnsRecords @param
+        $selector2Record = Get-DnsRecord @param
 
         $result += [PSCustomObject]@{
             DomainName = $domainName
@@ -173,7 +176,7 @@ Process {
                 DomainName = ("$($customSelector)._domainkey.$($domainName)")
             }
             $null -ne $CustomDNS ? ($param += @{Server = $customDNS}) : $null | Out-Null
-            $record = Get-DnsRecords @param
+            $record = Get-DnsRecord @param
                 ($result.Where({$_.DomainName -eq $domainName})) | Add-Member -NotePropertyName $customSelector -NotePropertyValue $record
         }
     }

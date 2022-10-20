@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     Script to generate TOC that works on Github
 

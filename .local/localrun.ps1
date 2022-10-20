@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Script for running local validation and documenation generation
 
@@ -10,23 +10,27 @@
 
 #>
 BEGIN {
-    Write-Host '## Starting the local run of the analyzer scripts!' -ForegroundColor DarkBlue
+    Write-Output '## Starting the local run of the analyzer scripts!'
 }
 PROCESS {
-    Write-Host '## Processing the local PowerShell script and there operation' -ForegroundColor Green
+    Write-Output '## Processing the local PowerShell script and there operation'
 
-    Write-Host '### Invoke script analyzer' -ForegroundColor Blue
-    ./utilities/Invoke-ScriptAnalyzer.ps1 -Paths 'Powershell\scripts' -Local
+    Write-Output '### Invoke script analyzer'
+    ./utilities/Invoke-ScriptAnalyzer.ps1 -Path '.' -Local
 
 
-    Write-Host '### Copying GitHUB TOC script to utilities folder.'
+    Write-Output '### Copying GitHUB TOC script to utilities folder.'
     Copy-Item -Path .\Powershell\Scripts\Generate-GithubTOC\Generate-githubTOC.ps1 -Destination .\utilities -Force
 
-    Write-Host '### Invoke new Markdown documentation - Script' -ForegroundColor Blue
+    Write-Output '### Invoke new Markdown documentation - Script'
     ./utilities/New-MDPowerShellScripts.ps1 -ScriptFolder '.\Powershell\scripts\' -OutputFolder '.\Powershell\scripts\' -KeepStructure $true -IncludeWikiTOC $true -WikiTOCStyle 'Github'
 
-    Write-Host '### Invoke new Markdown documentation - Central' -ForegroundColor Blue
+    Write-Output '### Invoke new Markdown documentation - Central'
     ./utilities/New-MDPowerShellScripts.ps1 -ScriptFolder '.\Powershell\scripts\' -OutputFolder '.\Powershell\scripts\' -KeepStructure $true -WikiSummaryOutputfileName 'readme.md' -IncludeWikiSummary $true -IncludeWikiTOC $true -WikiTOCStyle 'Github' -SummaryTitleAsLink $true -SummaryLinkPattern '/Powershell/Scripts/'
+
+
+    Invoke-ScriptAnalyzer -Path .\Powershell\Scripts -Recurse -ReportSummary
+
 
     Write-Output ('Setting up Readme')
     $readmefile = ('.\README.md')
@@ -41,5 +45,5 @@ PROCESS {
     $scriptTOC | Out-File $readmefile -Append
 }
 END {
-    Write-Host '## Ending the local run of the analyzer scripts!' -ForegroundColor DarkBlue
+    Write-Output '## Ending the local run of the analyzer scripts!'
 }

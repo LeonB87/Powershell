@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     This is a powershell script template
 
@@ -25,7 +25,7 @@ param (
     [string]$stringParameter
 )
 BEGIN {
-    write-verbose $stringParameter
+    Write-Verbose $stringParameter
 }
 PROCESS {
 
