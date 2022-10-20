@@ -10,7 +10,7 @@
 This scripts helps validating your powershell scripts in a CI pipeline
 
 ```PowerShell
- .\invoke-psscriptanalyzerCI.ps1 [-path] <String> [<CommonParameters>]
+ .\Invoke-PSScriptAnalyzerCI.ps1 [-path] <String> [<CommonParameters>]
 ```
 
 ## Information

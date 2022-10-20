@@ -1,4 +1,4 @@
-
+﻿
 
 <#
     .SYNOPSIS
@@ -32,7 +32,7 @@ BEGIN {
 
     Write-Output ("Starting to analyze scripts in folder:   '$($path)'")
 
-    if (-not $null -eq $module){
+    if (-not $null -eq $module) {
         Write-Output ("PSScriptAnalyzer Version:                '$($module.Version.ToString())'")
     }
 
@@ -47,7 +47,7 @@ BEGIN {
     }
 }
 PROCESS {
-    function Get-Results {
+    function Get-Result {
         # Parameter help description
         [Parameter(Mandatory = $true)]
         [object]$result
@@ -79,38 +79,38 @@ PROCESS {
 
             Source of this script: https://github.com/MathieuBuisson/PowerShell-DevOps/blob/master/Export-NUnitXml/Export-NUnitXml.psm1
         #>
-            [CmdletBinding()]
-            Param (
-                [Parameter(Mandatory, Position=0)]
-                [AllowNull()]
-                [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]]$ScriptAnalyzerResult,
+        [CmdletBinding()]
+        Param (
+            [Parameter(Mandatory, Position = 0)]
+            [AllowNull()]
+            [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]]$ScriptAnalyzerResult,
 
-                [Parameter(Mandatory, Position=1)]
-                [string]$Path
-            )
+            [Parameter(Mandatory, Position = 1)]
+            [string]$Path
+        )
 
-            $TotalNumber = If ($ScriptAnalyzerResult) { $ScriptAnalyzerResult.Count -as [string] } Else { '1' }
-            $FailedNumber = If ($ScriptAnalyzerResult) { $ScriptAnalyzerResult.Count -as [string] } Else { '0' }
-            $Now = Get-Date
-            $FormattedDate = Get-Date $Now -Format 'yyyy-MM-dd'
-            $FormattedTime = Get-Date $Now -Format 'T'
-            $User = $env:USERNAME
-            $MachineName = $env:COMPUTERNAME
-            $Cwd = $pwd.Path
-            $UserDomain = $env:USERDOMAIN
-            $OS = Get-CimInstance -ClassName Win32_OperatingSystem
-            $Platform = $OS.Caption
-            $OSVersion = $OS.Version
-            $ClrVersion = $PSVersionTable.PSVersion.ToString()
-            $CurrentCulture = (Get-Culture).Name
-            $UICulture = (Get-UICulture).Name
+        $TotalNumber = If ($ScriptAnalyzerResult) { $ScriptAnalyzerResult.Count -as [string] } Else { '1' }
+        $FailedNumber = If ($ScriptAnalyzerResult) { $ScriptAnalyzerResult.Count -as [string] } Else { '0' }
+        $Now = Get-Date
+        $FormattedDate = Get-Date $Now -Format 'yyyy-MM-dd'
+        $FormattedTime = Get-Date $Now -Format 'T'
+        $User = $env:USERNAME
+        $MachineName = $env:COMPUTERNAME
+        $Cwd = $pwd.Path
+        $UserDomain = $env:USERDOMAIN
+        $OS = Get-CimInstance -ClassName Win32_OperatingSystem
+        $Platform = $OS.Caption
+        $OSVersion = $OS.Version
+        $ClrVersion = $PSVersionTable.PSVersion.ToString()
+        $CurrentCulture = (Get-Culture).Name
+        $UICulture = (Get-UICulture).Name
 
-            Switch ($ScriptAnalyzerResult) {
-                $Null { $TestResult = 'Success'; $TestSuccess = 'True'; Break}
-                Default { $TestResult = 'Failure'; $TestSuccess = 'False'}
-            }
+        Switch ($ScriptAnalyzerResult) {
+            $Null { $TestResult = 'Success'; $TestSuccess = 'True'; Break}
+            Default { $TestResult = 'Failure'; $TestSuccess = 'False'}
+        }
 
-            $Header = @"
+        $Header = @"
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
         <test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="PSScriptAnalyzer" total="$TotalNumber" errors="0" failures="$FailedNumber" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="$FormattedDate" time="$FormattedTime">
           <environment user="$User" machine-name="$MachineName" cwd="$Cwd" user-domain="$UserDomain" platform="$Platform" nunit-version="2.5.8.0" os-version="$OSVersion" clr-version="$ClrVersion" />
@@ -121,7 +121,7 @@ PROCESS {
                 <results>`n
 "@
 
-            $Footer = @"
+        $Footer = @"
                 </results>
               </test-suite>
             </results>
@@ -129,29 +129,30 @@ PROCESS {
         </test-results>
 "@
 
-            If ( -not($ScriptAnalyzerResult) ) {
+        If ( -not($ScriptAnalyzerResult) ) {
 
-                $TestDescription = 'All PowerShell files pass the specified PSScriptAnalyzer rules'
-                $TestName = "PSScriptAnalyzer.{0}" -f $TestDescription
+            $TestDescription = 'All PowerShell files pass the specified PSScriptAnalyzer rules'
+            $TestName = "PSScriptAnalyzer.{0}" -f $TestDescription
 
-                $Body = @"
+            $Body = @"
                   <test-case description="$TestDescription" name="$TestName" time="0.0" asserts="0" success="True" result="Success" executed="True" />`n
 "@
-            }
-            Else { # $ScriptAnalyzerResult is not null
-                $Body = [string]::Empty
-                Foreach ( $Result in $ScriptAnalyzerResult ) {
+        }
+        Else {
+            # $ScriptAnalyzerResult is not null
+            $Body = [string]::Empty
+            Foreach ( $Result in $ScriptAnalyzerResult ) {
 
-                    $TestDescription = "Rule name : $($Result.RuleName)"
-                    $TestName = "PSScriptAnalyzer.{0} - {1} - Line {2}" -f $TestDescription, $($Result.ScriptName), $($Result.Line.ToString())
+                $TestDescription = "Rule name : $($Result.RuleName)"
+                $TestName = "PSScriptAnalyzer.{0} - {1} - Line {2}" -f $TestDescription, $($Result.ScriptName), $($Result.Line.ToString())
 
-                    # Need to Escape these otherwise we can end up with an invalid XML if the Stacktrace has non XML friendly chars like &, etc
-                    $Line = [System.Security.SecurityElement]::Escape($Result.Line)
-                    $ScriptPath = [System.Security.SecurityElement]::Escape($Result.ScriptPath)
-                    $Text = [System.Security.SecurityElement]::Escape($Result.Extent.Text)
-                    $Severity = [System.Security.SecurityElement]::Escape($Result.Severity)
+                # Need to Escape these otherwise we can end up with an invalid XML if the Stacktrace has non XML friendly chars like &, etc
+                $Line = [System.Security.SecurityElement]::Escape($Result.Line)
+                $ScriptPath = [System.Security.SecurityElement]::Escape($Result.ScriptPath)
+                $Text = [System.Security.SecurityElement]::Escape($Result.Extent.Text)
+                $Severity = [System.Security.SecurityElement]::Escape($Result.Severity)
 
-                    $TestCase = @"
+                $TestCase = @"
                   <test-case description="$TestDescription" name="$TestName" time="0.0" asserts="0" success="False" result="Failure" executed="True">
                     <failure>
                       <message>$($Result.Message)</message>
@@ -163,20 +164,23 @@ PROCESS {
                   </test-case>`n
 "@
 
-                    $Body += $TestCase
-                }
+                $Body += $TestCase
             }
-            $OutputXml = $Header + $Body + $Footer
-
-            # Checking our output is a well formed XML document
-            Try {
-                $XmlCheck = [xml]$OutputXml
-            }
-            Catch {
-                Throw "There was an problem when attempting to cast the output to XML : $($_.Exception.Message)"
-            }
-            $OutputXml | Out-File -FilePath $Path -Encoding utf8 -Force
         }
+        $OutputXml = $Header + $Body + $Footer
+
+        # Checking our output is a well formed XML document
+        Try {
+            $XmlCheck = [xml]$OutputXml
+            if ($ull -eq $XmlCheck) {
+                Write-Warning ("The XMLCheck is empty")
+            }
+        }
+        Catch {
+            Throw "There was an problem when attempting to cast the output to XML : $($_.Exception.Message)"
+        }
+        $OutputXml | Out-File -FilePath $Path -Encoding utf8 -Force
+    }
 
     foreach ($script in $scripts) {
         Write-Output ("Analyzing '$($script.FullName)'")
@@ -184,7 +188,7 @@ PROCESS {
         $results = Invoke-ScriptAnalyzer -Path $script.FullName -ReportSummary
         $combinedScriptAnalyzerResult += $results
         foreach ($result in $results ) {
-            Get-Results -result $result
+            Get-Result -result $result
         }
 
     }
@@ -211,7 +215,7 @@ END {
         Write-Output ("No messages were found")
     }
 
-    Write-output ("Exporting to NUnit XML")
+    Write-Output ("Exporting to NUnit XML")
     Export-NUnitXml -ScriptAnalyzerResult $combinedScriptAnalyzerResult -Path '.\ScriptAnalyzerResult.xml'
 
 }

@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     Script to create a Tree view of a folder
 
@@ -72,7 +72,7 @@ END {
             return $FolderStructure
         }
         "Json" {
-            return $FolderStructure | convertTo-Json -Depth 100 -Compress
+            return $FolderStructure | ConvertTo-Json -Depth 100 -Compress
         }
         Default {}
     }
