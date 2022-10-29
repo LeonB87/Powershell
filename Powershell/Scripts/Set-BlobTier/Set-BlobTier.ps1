@@ -53,8 +53,8 @@ function Set-BlobTier {
             $blobs = Get-AzStorageBlob -Container $storageContainer -Context $storageContext -MaxCount $MaxReturn -ContinuationToken $Token
 
             :blobLoop foreach ($blob in $blobs) {
-                if ($targetTier -ne "Any") {
-                    if ($blob.ICloudBlob.Properties.StandardBlobTier -ine $source) {
+                if ($sourceTier -ne "Any") {
+                    if ($blob.ICloudBlob.Properties.StandardBlobTier -ine $sourceTier) {
                         Write-Verbose ("The blob '$($blob.Name)' has the wrong source Tier")
                         continue blobLoop
                     }
