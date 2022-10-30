@@ -23,6 +23,10 @@ Script to create a Tree view of a folder
 
 This scripts helps validating your powershell scripts in a CI pipeline
 
+### [Set-BlobTier.ps1](/Powershell/Scripts/Set-BlobTier/Set-BlobTier.md)
+
+Set blobs inside a specific container to a tier.
+
 ### [template.ps1](/Powershell/Scripts/template/template.md)
 
 This is a powershell script template
