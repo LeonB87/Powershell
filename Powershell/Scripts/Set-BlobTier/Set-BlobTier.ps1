@@ -56,7 +56,7 @@ param (
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNull()]
-    [string]$regularExpression = "^2019",
+    [string]$regularExpression,
 
     [Parameter(Mandatory = $false)]
     [ValidateSet("Cold", "Hot", "Archive", "Any")]
@@ -85,6 +85,15 @@ process {
         Exit 1
     }
 
+    if ([string]::IsNullOrWhiteSpace($regularExpression)) {
+        Write-Verbose ("No regular expression was supplied.")
+        $useRegex = $false
+    }
+    else {
+        Write-Verbose ("No regular expression was supplied.")
+        $useRegex = $true
+    }
+
     $Token = $Null
 
     do {
@@ -103,7 +112,7 @@ process {
                 continue blobLoop
             }
 
-            if ($blob.Name -match $regularExpression) {
+            if (($blob.Name -match $regularExpression) -or ($useRegex -eq $false)) {
                 Write-Verbose ("Setting blob'$($blob.Name)' to '$($targetTier)'")
                 $blob.ICloudBlob.SetStandardBlobTier($targetTier)
                 $count++ | Out-Null
