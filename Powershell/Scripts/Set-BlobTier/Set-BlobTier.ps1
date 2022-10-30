@@ -125,7 +125,7 @@ process {
         }
         $Token = $blob[$blob.Count - 1].ContinuationToken;
 
-        Write-Output "Processed "($count)" items. Continuation token = " $Token.NextMarker
+        Write-Output ("Processed '$($count)' items. Continuation token = '$($Token.NextMarker)'")
     }while ($Null -ne $Token)
 }
 
