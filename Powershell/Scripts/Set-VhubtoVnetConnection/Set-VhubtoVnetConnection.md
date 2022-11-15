@@ -34,8 +34,7 @@ Setup a connection from the VWAN Hub to a VNET
 
 ## Description
 
-Does not
-- does not work cross subscription
+Setup a connection from the VWAN Hub to a VNET
 
 
 ## Examples
@@ -55,6 +54,7 @@ Does not
         vwanSubscriptionId    = "69427cbe-a3a3-41d4-ab48-cc6f350eef45"
         vnetSubscriptionId    = "f836b99a-c238-4e76-a1ef-0364231707cc"
 }
+Set-VhubtoVnetConnection @parameters
 ```
 
 ## Parameters
