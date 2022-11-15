@@ -76,15 +76,23 @@ param (
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string]$associoatedRouteTable,
+    [string]$associoatedRouteTable = "default",
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string[]]$propagatedRouteTable,
+    [string[]]$propagatedRouteTable = "none",
 
     [Parameter(Mandatory = $false)]
     [ValidateNotNullOrEmpty()]
-    [string[]]$propagatedLabels
+    [string[]]$propagatedLabels = "none",
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [string]$vnetSubscriptionId,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateNotNullOrEmpty()]
+    [string]$vwanSubscriptionId
 
 )
 begin {
@@ -97,6 +105,8 @@ begin {
     Write-Output ("associoatedRouteTable:   $($associoatedRouteTable)")
     Write-Output ("propagetadRouteTable:    $($propagatedRouteTable)")
     Write-Output ("propagatedLabels:        $($propagatedLabels)")
+    Write-Output ("vnetSubscriptionId:      $($vnetSubscriptionId)")
+    Write-Output ("vwanSubscriptionId:      $($vwanSubscriptionId)")
 
     $associoatedRouteTable = ($associoatedRouteTable -eq "Default") ? "defaultRouteTable" : $associoatedRouteTable
     $associoatedRouteTable = ($associoatedRouteTable -eq "None") ? "noneRouteTable" : $associoatedRouteTable
@@ -107,14 +117,23 @@ begin {
         $propagatedRouteTable = $propagatedRouteTable.Replace($rt, $updatedName)
     }
 
-    $vwanRG = Get-AzResourceGroup -ResourceGroupName $vwanResourcegroup
-    if ($null -eq $vwanRG) {
-        Write-Error ("The VWAN resourcegroup '$($vwanResourcegroup)' could not be found") ; Exit 1
-    }
-
+    Write-Output ("Switching to VNET context")
+    Set-AzContext -SubscriptionId $vnetSubscriptionId
     $vnetRG = Get-AzResourceGroup -ResourceGroupName $vnetResourcegroup
     if ($null -eq $vnetRG) {
         Write-Error ("The VNET resourcegroup '$($vnetResourcegroup)' could not be found") ; Exit 1
+    }
+
+    $remoteVirtualNetwork = Get-AzVirtualNetwork -Name $virtualNetworkName -ResourceGroupName $vnetRG.ResourceGroupName
+    if ($null -eq $remoteVirtualNetwork) {
+        Write-Error ("The VNET'$($virtualNetworkName)' could not be found") ; Exit 1
+    }
+
+    Write-Output ("Switching to VWAN context")
+    Set-AzContext -SubscriptionId $vwanSubscriptionId
+    $vwanRG = Get-AzResourceGroup -ResourceGroupName $vwanResourcegroup
+    if ($null -eq $vwanRG) {
+        Write-Error ("The VWAN resourcegroup '$($vwanResourcegroup)' could not be found") ; Exit 1
     }
 
     $virtualHub = Get-AzVirtualHub -ResourceGroupName $vwanRG.ResourceGroupName -Name $virtualHubName
@@ -122,10 +141,6 @@ begin {
         Write-Error ("The Virtual hub '$($virtualHubName)' could not be found") ; Exit 1
     }
 
-    $remoteVirtualNetwork = Get-AzVirtualNetwork -Name $virtualNetworkName -ResourceGroupName $vnetRG.ResourceGroupName
-    if ($null -eq $remoteVirtualNetwork) {
-        Write-Error ("The VNET'$($virtualNetworkName)' could not be found") ; Exit 1
-    }
 }
 process {
     $parameters = @{
