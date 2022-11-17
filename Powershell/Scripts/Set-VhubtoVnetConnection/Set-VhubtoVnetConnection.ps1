@@ -30,6 +30,12 @@
     .PARAMETER propagatedLabels
     the propagates route labels; defaults to none
 
+    .PARAMETER vnetSubscriptionId
+    The subscription ID of the target virtual network
+
+    .PARAMETER vwanSubscriptionId
+    The subscription ID of the target virtual wan
+
     .EXAMPLE
     $parameters = @{
             vwanResourcegroup     = "rg-vwan"

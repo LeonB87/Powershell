@@ -134,7 +134,7 @@ PROCESS {
                         ("### $($script.Name) `r") | Out-File -FilePath $WikiSummaryFilename -Append
                     }
                 }
-                $script | Format-List *
+
                 if ($help) {
                     $outputFile = ("$($newfolder)\$($script.BaseName)$($scriptNameSuffix)")
                     Out-File -FilePath $outputFile

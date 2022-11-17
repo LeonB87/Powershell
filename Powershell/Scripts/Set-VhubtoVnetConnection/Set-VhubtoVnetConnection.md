@@ -12,12 +12,14 @@
      * [associoatedRouteTable](#associoatedroutetable)
      * [propagatedRouteTable](#propagatedroutetable)
      * [propagatedLabels](#propagatedlabels)
+     * [vnetSubscriptionId](#vnetsubscriptionid)
+     * [vwanSubscriptionId](#vwansubscriptionid)
 ## Synopsis
 
 Setup a connection from the VWAN Hub to a VNET
 
 ```PowerShell
- .\Set-VhubtoVnetConnection.ps1 [-vwanResourcegroup] <String> [-virtualHubName] <String> [-vnetResourcegroup] <String> [-virtualNetworkName] <String> [-hubVnetConnectioName] <String> [[-associoatedRouteTable] <String>] [[-propagatedRouteTable] <String[]>] [[-propagatedLabels] <String[]>] [<CommonParameters>]
+ .\Set-VhubtoVnetConnection.ps1 [-vwanResourcegroup] <String> [-virtualHubName] <String> [-vnetResourcegroup] <String> [-virtualNetworkName] <String> [-hubVnetConnectioName] <String> [[-associoatedRouteTable] <String>] [[-propagatedRouteTable] <String[]>] [[-propagatedLabels] <String[]>] [[-vnetSubscriptionId] <String>] [[-vwanSubscriptionId] <String>] [<CommonParameters>]
 ```
 
 ## Information
@@ -115,6 +117,7 @@ the associated route table; defaults to default
 | | |
 |-|-|
 | Type: | String |
+| DefaultValue : | default|
 | ParameterValue : | String|
 | PipelineInput : | false|
 | Position : | 6|
@@ -125,6 +128,7 @@ the propagates route tables; defaults to none
 | | |
 |-|-|
 | Type: | String[] |
+| DefaultValue : | none|
 | ParameterValue : | String[]|
 | PipelineInput : | false|
 | Position : | 7|
@@ -135,7 +139,28 @@ the propagates route labels; defaults to none
 | | |
 |-|-|
 | Type: | String[] |
+| DefaultValue : | none|
 | ParameterValue : | String[]|
 | PipelineInput : | false|
 | Position : | 8|
+| Required : | false|
+### vnetSubscriptionId
+
+The subscription ID of the target virtual network
+| | |
+|-|-|
+| Type: | String |
+| ParameterValue : | String|
+| PipelineInput : | false|
+| Position : | 9|
+| Required : | false|
+### vwanSubscriptionId
+
+The subscription ID of the target virtual wan
+| | |
+|-|-|
+| Type: | String |
+| ParameterValue : | String|
+| PipelineInput : | false|
+| Position : | 10|
 | Required : | false|
