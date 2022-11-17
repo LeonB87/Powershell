@@ -1,0 +1,58 @@
+{
+	"name": "PowerShell",
+	"image": "mcr.microsoft.com/powershell:lts-debian-11",
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:1": {
+			"installZsh": "true",
+			"username": "vscode",
+			"uid": "1000",
+			"gid": "1000",
+			"upgradePackages": "false",
+			"installOhMyZsh": "true",
+			"nonFreePackages": "true"
+		},
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/powershell:1": {},
+		"ghcr.io/natescherer/devcontainers-custom-features/powershell-resources:1": {},
+		"github-cli": "latest",
+		"azure-cli": "latest"
+	},
+
+	"postCreateCommand": "sudo chsh vscode -s \"$(which pwsh)\"",
+
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": { 
+				"terminal.integrated.defaultProfile.linux": "pwsh"
+			},
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"ms-vscode.powershell",
+				"msazurermtools.azurerm-vscode-tools",
+				"ms-azuretools.vscode-bicep",
+				"ms-dotnettools.csharp",
+				"ms-azuretools.vscode-docker",
+				"editorconfig.editorconfig",
+				"github.vscode-pull-request-github",
+				"davidanson.vscode-markdownlint",
+				"streetsidesoftware.code-spell-checker",
+				"ms-vscode.powershell",
+				"ms-azure-devops.azure-pipelines",
+				"mhutchie.git-graph",
+				"wengerk.highlight-bad-chars",
+				"bencoleman.armview",
+				"jkiviluoto.tws",
+				"mechatroner.rainbow-csv"
+			]
+		}
+	}
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
