@@ -27,6 +27,10 @@ This scripts helps validating your powershell scripts in a CI pipeline
 
 Set blobs inside a specific container to a tier.
 
+### [Set-VhubtoVnetConnection.ps1](/Powershell/Scripts/Set-VhubtoVnetConnection/Set-VhubtoVnetConnection.md)
+
+Setup a connection from the VWAN Hub to a VNET
+
 ### [template.ps1](/Powershell/Scripts/template/template.md)
 
 This is a powershell script template
