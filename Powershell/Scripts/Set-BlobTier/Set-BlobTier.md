@@ -93,7 +93,6 @@ the storage account key
 | | |
 |-|-|
 | Type: | String |
-| DefaultValue : | ^2019|
 | ParameterValue : | String|
 | PipelineInput : | false|
 | Position : | 5|
@@ -115,7 +114,7 @@ the tier to change a blob to
 | | |
 |-|-|
 | Type: | String |
-| DefaultValue : | Cold|
+| DefaultValue : | Cool|
 | ParameterValue : | String|
 | PipelineInput : | false|
 | Position : | 7|

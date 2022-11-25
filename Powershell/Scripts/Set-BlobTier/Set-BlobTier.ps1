@@ -59,12 +59,12 @@ param (
     [string]$regularExpression,
 
     [Parameter(Mandatory = $false)]
-    [ValidateSet("Cold", "Hot", "Archive", "Any")]
+    [ValidateSet("Cool", "Hot", "Archive", "Any")]
     [string]$sourceTier = "Any",
 
     [Parameter(Mandatory = $false)]
-    [ValidateSet("Cold", "Hot", "Archive")]
-    [string]$targetTier = "Cold"
+    [ValidateSet("Cool", "Hot", "Archive")]
+    [string]$targetTier = "Cool"
 )
 begin {
 
