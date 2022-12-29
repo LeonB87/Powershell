@@ -45,7 +45,7 @@ PROCESS {
     foreach ($item in $folderItems) {
 
         if ($item.PSIsContainer -eq "True") {
-            $subtree = Get-FolderItems -Path $item.FullName
+            $subtree = Get-FolderStructure -Path $item.FullName
             $FolderObject = [PSCustomObject]@{
                 Name    = $item.name
                 Type    = "Folder"
