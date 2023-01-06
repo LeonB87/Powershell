@@ -45,4 +45,4 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          sarif_file: testResults.xml
+          path: testResults.xml
