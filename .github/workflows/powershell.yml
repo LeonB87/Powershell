@@ -33,7 +33,7 @@ jobs:
       - name: Pester
         shell: pwsh
         run: |
-            $container = New-PesterContainer -Path "utilities\new-genericpestertest.ps1" -Data @{folder = "powershell\Scripts"}
+            $container = New-PesterContainer -Path "utilities\new-genericpestertest.ps1" -Data @{folder = "Powershell/Scripts"}
             invoke-pester -container $container -CI
       # Upload the SARIF file generated in the previous step
       - name: Upload SARIF results file
