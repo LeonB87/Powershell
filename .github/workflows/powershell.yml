@@ -39,7 +39,7 @@ jobs:
         if: always()
         shell: pwsh
         run: |
-          gci *result* -recurse
+          (gci -Filter "*result*" -recurse).FullName
       # Upload the SARIF file generated in the previous step
       - name: Upload SARIF results file
         if: always()
