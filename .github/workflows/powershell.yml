@@ -48,4 +48,3 @@ jobs:
           test_results_path: testResults.xml
           report_name: Results
           report_title: Copy of Subset of Tests
-          github_token: ${{ secrets.GITHUB_TOKEN }}
